@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  
+Copyright (C) 2009 Mads Mohr Christensen, <hr.mohr@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:amq="http://activemq.apache.org/schema/core"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+    http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+    
+    <import resource="classpath:database.xml" />
+    
+    <bean id="competitionDAO" class="dk.cubing.liveresults.dao.CompetitionDAO" />
+    <bean id="eventDAO" class="dk.cubing.liveresults.dao.EventDAO" />
+    
+    <bean id="competitionService" class="dk.cubing.liveresults.service.CompetitionService">
+        <property name="dao" ref="competitionDAO" />
+    </bean>
+    <bean id="eventService" class="dk.cubing.liveresults.service.EventService">
+        <property name="dao" ref="eventDAO" />
+    </bean>
+
+    <amq:connectionFactory id="jmsFactory" brokerURL="tcp://localhost:61616" />
+
+    <bean id="jmsConsumer" class="dk.cubing.liveresults.jms.Consumer">
+        <constructor-arg index="0" ref="jmsFactory" />
+        <constructor-arg index="1"><value>ResultsBot</value></constructor-arg>
+    </bean>
+
+    <bean id="resultsBot" class="dk.cubing.liveresults.resultsbot.engine.ResultsBot">
+        <constructor-arg index="0"><value>ResultsBot</value></constructor-arg>
+        <constructor-arg index="1"><value>jubii.dk.quakenet.org</value></constructor-arg>
+        <constructor-arg index="2"><value>#liveresults-test</value></constructor-arg>
+        <constructor-arg index="3"><value>${irc.password}</value></constructor-arg>
+        <property name="consumer" ref="jmsConsumer" />
+        <property name="competitionService" ref="competitionService" />
+        <property name="eventService" ref="eventService" />
+    </bean>
+    
+    <aop:config proxy-target-class="true" />
+</beans>

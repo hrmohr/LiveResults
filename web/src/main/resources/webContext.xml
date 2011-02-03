@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+	<!--
+		Copyright (C) 2009 Mads Mohr Christensen, <hr.mohr@gmail.com> This
+		program is free software: you can redistribute it and/or modify it
+		under the terms of the GNU General Public License as published by the
+		Free Software Foundation, either version 3 of the License, or (at your
+		option) any later version. This program is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU General Public License for more details. You
+		should have received a copy of the GNU General Public License along
+		with this program. If not, see <http://www.gnu.org/licenses/>.
+	-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<bean
+		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+	<!-- DAO setup begin -->
+	<bean id="competitionDAO" class="dk.cubing.liveresults.dao.CompetitionDAO" />
+	<bean id="competitionService" class="dk.cubing.liveresults.service.CompetitionService">
+		<property name="dao" ref="competitionDAO" />
+	</bean>
+
+	<bean id="competitorDAO" class="dk.cubing.liveresults.dao.CompetitorDAO" />
+	<bean id="competitorService" class="dk.cubing.liveresults.service.CompetitorService">
+		<property name="dao" ref="competitorDAO" />
+	</bean>
+
+	<bean id="eventDAO" class="dk.cubing.liveresults.dao.EventDAO" />
+	<bean id="eventService" class="dk.cubing.liveresults.service.EventService">
+		<property name="dao" ref="eventDAO" />
+	</bean>
+	
+	<bean id="resultDAO" class="dk.cubing.liveresults.dao.ResultDAO" />
+	<bean id="resultService" class="dk.cubing.liveresults.service.ResultService">
+		<property name="dao" ref="resultDAO" />
+	</bean>
+	<!-- DAO setup end -->
+
+	<!-- Frontend action setup begin -->
+	<bean id="competitionAction" scope="prototype"
+		class="dk.cubing.liveresults.action.CompetitionAction">
+		<property name="competitionService" ref="competitionService" />
+		<property name="eventService" ref="eventService" />
+		<property name="resultService" ref="resultService" />
+	</bean>
+
+	<bean id="competitorsAction" scope="prototype"
+		class="dk.cubing.liveresults.action.CompetitorsAction">
+		<property name="competitionService" ref="competitionService" />
+		<property name="competitorService" ref="competitorService" />
+		<property name="resultService" ref="resultService" />
+	</bean>
+
+	<bean id="faqAction" scope="prototype"
+		class="dk.cubing.liveresults.action.FaqAction" />
+		
+	<bean id="icalAction" scope="prototype"
+		class="dk.cubing.liveresults.action.IcalAction">
+		<property name="competitionService" ref="competitionService" />
+	</bean>
+	<!-- Frontend action setup end -->
+	
+	<!-- Admin action setup begin -->
+	<bean id="competitionAdminAction" scope="prototype"
+		class="dk.cubing.liveresults.action.admin.CompetitionAction">
+		<property name="competitionService" ref="competitionService" />
+		<property name="userDetailsManager" ref="userDetailsManager" />
+		<property name="passwordEncoder" ref="passwordEncoder" />
+	</bean>
+
+	<bean id="scoresheetAction" class="dk.cubing.liveresults.action.admin.ScoresheetAction">
+		<property name="competitionService" ref="competitionService" />
+		<property name="spreadSheetFilename" value="/xls/results.xls" />
+	</bean>
+
+	<bean id="emailAction" class="dk.cubing.liveresults.action.admin.EmailAction">
+		<property name="competitionService" ref="competitionService" />
+	</bean>
+
+	<bean id="diplomasAction" class="dk.cubing.liveresults.action.admin.DiplomasAction">
+		<property name="competitionService" ref="competitionService" />
+		<property name="eventService" ref="eventService" />
+	</bean>
+
+	<bean id="scramblesAction" class="dk.cubing.liveresults.action.admin.ScramblesAction">
+		<property name="competitionService" ref="competitionService" />
+		<property name="xsltTemplate" value="/xsl/scrambles.xsl" />
+	</bean>
+	
+	<bean id="wcaParser" class="dk.cubing.liveresults.uploader.parser.WcaParser">
+        <property name="version" value="VERSION: JUNE 2009" />
+    </bean>
+    <bean id="uploadResultsAction" class="dk.cubing.liveresults.action.admin.UploadResults">
+        <property name="competitionService" ref="competitionService" />
+        <property name="parser" ref="wcaParser" />
+    </bean>
+	<!-- Admin action setup end -->
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="punit" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="database" value="MYSQL" />
+				<property name="showSql" value="${jdbc.show_sql}" />
+				<property name="generateDdl" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<aop:config proxy-target-class="true" />
+</beans>

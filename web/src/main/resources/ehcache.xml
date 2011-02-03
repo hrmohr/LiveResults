@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../main/config/ehcache.xsd">
+
+    <diskStore path="java.io.tmpdir"/>
+
+    <defaultCache
+            maxElementsInMemory="10"
+            eternal="false"
+            timeToIdleSeconds="5"
+            timeToLiveSeconds="10"
+            overflowToDisk="true"
+            />
+
+    <!-- Page and Page Fragment Caches -->
+
+    <cache name="CachePage1CachingFilter"
+           maxElementsInMemory="10"
+           eternal="false"
+           timeToIdleSeconds="30"
+           timeToLiveSeconds="60"
+           overflowToDisk="true">
+    </cache>
+</ehcache>

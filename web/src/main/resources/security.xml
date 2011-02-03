@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  
+Copyright (C) 2009 Mads Mohr Christensen, <hr.mohr@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:sec="http://www.springframework.org/schema/security" 
+	xmlns:beans="http://www.springframework.org/schema/beans"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd">
+    
+    <sec:global-method-security secured-annotations="enabled" />
+    
+    <sec:http auto-config="true">
+	    <sec:intercept-url pattern="/admin/login.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	    <sec:intercept-url pattern="/admin/**" access="ROLE_USER" />
+	    <sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	    <sec:form-login 
+	       login-page="/admin/login.jsp" 
+	       authentication-failure-url="/admin/login.jsp?authfailed=true"
+	       default-target-url="/admin/" 
+	    />
+	    <sec:logout logout-success-url="/admin/login.jsp" />
+    </sec:http>
+
+    <bean id="passwordEncoder" class="org.springframework.security.providers.encoding.ShaPasswordEncoder" />
+
+	<sec:authentication-provider>
+	    <sec:password-encoder hash="sha" />
+		<sec:jdbc-user-service id="userDetailsManager" data-source-ref="dataSource" />
+	</sec:authentication-provider>
+</beans>

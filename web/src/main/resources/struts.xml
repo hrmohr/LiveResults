@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+	<!--
+		Copyright (C) 2009 Mads Mohr Christensen, <hr.mohr@gmail.com> This
+		program is free software: you can redistribute it and/or modify it
+		under the terms of the GNU General Public License as published by the
+		Free Software Foundation, either version 3 of the License, or (at your
+		option) any later version. This program is distributed in the hope
+		that it will be useful, but WITHOUT ANY WARRANTY; without even the
+		implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+		PURPOSE. See the GNU General Public License for more details. You
+		should have received a copy of the GNU General Public License along
+		with this program. If not, see <http://www.gnu.org/licenses/>.
+	-->
+
+<!DOCTYPE struts PUBLIC  
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"  
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+<struts>
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.devMode" value="${struts.devMode}" />
+	<constant name="struts.action.extension" value="action" />
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<constant name="struts.custom.i18n.resources" value="LiveResults" />
+	<constant name="struts.locale" value="en_US" />
+	<constant name="struts.i18n.reload" value="false" />
+	<constant name="struts.configuration.xml.reload" value="false" />
+	<constant name="struts.ui.theme" value="css_xhtml" />
+
+	<package name="competition" namespace="/" extends="struts-default">
+		<global-results>
+			<result name="error" type="dispatcher">/error.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping result="error" exception="java.lang.Exception" />
+		</global-exception-mappings>
+
+		<action name="index" class="competitionAction" method="list">
+			<interceptor-ref name="paramsPrepareParamsStack" />
+
+			<result name="success" type="dispatcher">/WEB-INF/pages/competitions.jsp
+			</result>
+		</action>
+
+		<action name="competitors" class="competitorsAction" method="execute">
+			<interceptor-ref name="paramsPrepareParamsStack" />
+
+			<result name="success" type="dispatcher">/WEB-INF/pages/competitors.jsp
+			</result>
+		</action>
+
+		<action name="results" class="competitionAction" method="execute">
+			<interceptor-ref name="paramsPrepareParamsStack" />
+
+			<result name="success" type="dispatcher">/WEB-INF/pages/results.jsp
+			</result>
+		</action>
+
+		<action name="records" class="competitionAction" method="execute">
+			<interceptor-ref name="paramsPrepareParamsStack" />
+
+			<result name="success" type="dispatcher">/WEB-INF/pages/records.jsp
+			</result>
+		</action>
+
+		<action name="faq" class="faqAction">
+			<result name="success" type="dispatcher">/WEB-INF/pages/faq.jsp</result>
+		</action>
+		
+		<action name="ical" class="icalAction" method="list">
+			<result name="success" type="stream">
+				<param name="contentType">text/calendar</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">inline; wca.ics</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+	</package>
+
+	<package name="ajax" namespace="/" extends="json-default">
+		<global-results>
+			<result name="error" type="dispatcher">/error.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping result="error" exception="java.lang.Exception" />
+		</global-exception-mappings>
+
+		<action name="json" class="competitionAction" method="execute">
+			<interceptor-ref name="paramsPrepareParamsStack" />
+
+			<result type="json">
+				<param name="excludeProperties">event.results</param>
+				<param name="noCache">true</param>
+				<param name="enableGZIP">true</param>
+			</result>
+		</action>
+
+		<action name="scoreboard" class="competitionAction" method="setScoreboardMode">
+			<interceptor-ref name="paramsPrepareParamsStack" />
+
+			<result type="json">
+				<param name="excludeProperties">event.results</param>
+				<param name="noCache">true</param>
+				<param name="enableGZIP">true</param>
+			</result>
+		</action>
+	</package>
+
+	<package name="admin" namespace="/admin" extends="struts-default">
+		<global-results>
+			<result name="error" type="dispatcher">/admin/error.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping result="error" exception="java.lang.Exception" />
+		</global-exception-mappings>
+
+		<action name="index">
+			<result name="success" type="dispatcher">/WEB-INF/pages/admin/index.jsp
+			</result>
+		</action>
+
+		<!-- Competitions begin -->
+		<action name="viewCompetitions" class="competitionAdminAction"
+			method="list">
+			<result name="success" type="dispatcher">/WEB-INF/pages/admin/competitions.jsp
+			</result>
+		</action>
+		<action name="editCompetition" class="competitionAdminAction"
+			method="execute">
+			<interceptor-ref name="params" />
+			<interceptor-ref name="prepare" />
+
+			<result name="input" type="dispatcher">/WEB-INF/pages/admin/competitionForm.jsp
+			</result>
+			<result name="success" type="redirect">viewCompetitions.action</result>
+		</action>
+		<action name="saveCompetition" class="competitionAdminAction"
+			method="save">
+			<result name="input" type="dispatcher">/WEB-INF/pages/admin/competitionForm.jsp
+			</result>
+			<result name="success" type="redirect">viewCompetitions.action</result>
+		</action>
+		<!-- Competitions end -->
+
+		<!-- Diplomas begin -->
+		<action name="diplomas" class="diplomasAction" method="list">
+			<result name="success" type="dispatcher">/WEB-INF/pages/admin/diplomas.jsp
+			</result>
+		</action>
+		<action name="generateDiploma" class="diplomasAction" method="execute">
+			<result name="success" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">${contentDisposition}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<!-- Diplomas end -->
+
+		<!-- Scoresheet begin -->
+		<action name="scoresheet" class="scoresheetAction" method="list">
+			<result name="success" type="dispatcher">/WEB-INF/pages/admin/uploadForm.jsp
+			</result>
+		</action>
+		<action name="uploadCsv" class="scoresheetAction" method="parseCsv">
+			<result name="input" type="dispatcher">/WEB-INF/pages/admin/uploadForm.jsp
+			</result>
+			<result name="success" type="redirect">generateScoresheet.action</result>
+		</action>
+		<action name="generateScoresheet" class="scoresheetAction"
+			method="generateScoresheet">
+			<result name="input" type="dispatcher">/WEB-INF/pages/admin/addEventForm.jsp
+			</result>
+			<result name="success" type="stream">
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">${contentDisposition}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<!-- Scoresheet end -->
+		
+		<!-- Email begin -->
+		<action name="email" class="scoresheetAction" method="list">
+			<result name="success" type="dispatcher">/WEB-INF/pages/admin/emailUploadForm.jsp
+			</result>
+		</action>
+		<action name="uploadEmailCsv" class="emailAction" method="parseCsv">
+			<result name="input" type="dispatcher">/WEB-INF/pages/admin/emailUploadForm.jsp
+			</result>
+			<result name="success" type="dispatcher">/WEB-INF/pages/admin/composeEmailForm.jsp
+			</result>
+		</action>
+		<action name="sendEmail" class="emailAction" method="sendEmail">
+			<result name="input" type="dispatcher">/WEB-INF/pages/admin/composeEmailForm.jsp
+			</result>
+			<result name="success" type="dispatcher">/WEB-INF/pages/admin/emailSent.jsp
+			</result>
+		</action>
+		<!-- Email end -->
+
+		<!-- Scrambles begin -->
+		<action name="scrambles" class="scramblesAction" method="list">
+			<result name="success" type="dispatcher">/WEB-INF/pages/admin/uploadFormScrambles.jsp
+			</result>
+		</action>
+		<action name="uploadCsvScrambles" class="scramblesAction" method="parseCsv">
+			<result name="input" type="dispatcher">/WEB-INF/pages/admin/uploadFormScrambles.jsp
+			</result>
+			<result name="success" type="dispatcher">/WEB-INF/pages/admin/addEventFormScrambles.jsp</result>
+		</action>
+		<action name="generateScrambles" class="scramblesAction"
+			method="generateScrambles">
+			<result name="input" type="dispatcher">/WEB-INF/pages/admin/addEventFormScrambles.jsp
+			</result>
+			<result name="success" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">${contentDisposition}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<!-- Scrambles end -->
+		
+		<!-- Upload results begin -->
+        <action name="uploadResults" class="uploadResultsAction" method="list">
+            <result name="success" type="dispatcher">/WEB-INF/pages/admin/uploadResultsForm.jsp
+            </result>
+        </action>
+        <action name="uploadXls" class="uploadResultsAction" method="parseResults">
+            <result name="input" type="dispatcher">/WEB-INF/pages/admin/uploadResultsForm.jsp
+            </result>
+            <result name="success" type="dispatcher">/WEB-INF/pages/admin/uploadResultsForm.jsp
+            </result>
+        </action>
+        <!-- Upload results end -->
+	</package>
+
+</struts>

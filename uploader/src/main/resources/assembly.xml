@@ -1,0 +1,82 @@
+<!--  
+Copyright (C) 2009 Mads Mohr Christensen, <hr.mohr@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<assembly>
+  <id>release</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <directory>target/appassembler/jsw/uploader/bin</directory>
+      <outputDirectory>bin</outputDirectory>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <fileSet>
+      <directory>target/appassembler/jsw/uploader/lib</directory>
+      <outputDirectory>lib</outputDirectory>
+      <excludes>
+        <exclude>*.war</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet>
+      <directory>target/appassembler/jsw/uploader/conf</directory>
+      <outputDirectory>conf</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/appassembler/jsw/uploader/logs</directory>
+      <outputDirectory>logs</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/appassembler/jsw/uploader/db</directory>
+      <outputDirectory>db</outputDirectory>
+    </fileSet>
+  </fileSets>
+  <files>
+    <file>
+        <source>../LICENSE</source>
+        <outputDirectory>/</outputDirectory>
+        <fileMode>0644</fileMode>
+        <lineEnding>unix</lineEnding>
+    </file>
+    <file>
+        <source>README.txt</source>
+        <outputDirectory>/</outputDirectory>
+        <fileMode>0644</fileMode>
+        <lineEnding>dos</lineEnding>
+    </file>
+    <file>
+        <source>target/classes/config.properties-dist</source>
+        <outputDirectory>conf</outputDirectory>
+        <destName>config.properties</destName>
+        <fileMode>0644</fileMode>
+        <lineEnding>unix</lineEnding>
+    </file>
+    <file>
+        <source>run.bat</source>
+        <outputDirectory>/</outputDirectory>
+        <fileMode>0644</fileMode>
+        <lineEnding>dos</lineEnding>
+    </file>
+    <file>
+        <source>run.sh</source>
+        <outputDirectory>/</outputDirectory>
+        <fileMode>0755</fileMode>
+        <lineEnding>unix</lineEnding>
+    </file>
+  </files>
+</assembly>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  
+Copyright (C) 2009 Mads Mohr Christensen, <hr.mohr@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:jaxws="http://cxf.apache.org/jaxws"
+    xmlns:amq="http://activemq.apache.org/schema/core"
+    xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+    http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+    http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+    
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	<import resource="classpath:database.xml" />
+	
+    <bean id="competitionDAO" class="dk.cubing.liveresults.dao.CompetitionDAO" />
+    
+    <bean id="competitionService" class="dk.cubing.liveresults.service.CompetitionService">
+        <property name="dao" ref="competitionDAO" />
+    </bean>
+
+    <amq:broker useJmx="false" persistent="false">
+        <amq:transportConnectors>
+            <amq:transportConnector uri="tcp://localhost:61616" />
+        </amq:transportConnectors>
+    </amq:broker>
+    
+    <amq:connectionFactory id="jmsFactory" brokerURL="tcp://localhost:61616" />
+
+    <bean id="jmsProducer" class="dk.cubing.liveresults.jms.Producer">
+        <constructor-arg index="0" ref="jmsFactory" />
+        <constructor-arg index="1">
+            <value>ResultsBot</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="liveResultsWebService" class="dk.cubing.liveresults.webservice.LiveResultsImpl">
+        <property name="clientVersion" value="${project.version}" />  
+        <property name="service" ref="competitionService" />
+        <property name="producer" ref="jmsProducer" />
+    </bean>
+
+    <jaxws:endpoint 
+      id="liveResults" 
+      implementorClass="dk.cubing.liveresults.webservice.LiveResultsImpl"
+      implementor="#liveResultsWebService" 
+      address="/LiveResults"
+    />
+
+    <aop:config proxy-target-class="true" />
+</beans>

@@ -1,0 +1,537 @@
+/* wca css begin */
+body {
+  margin: 15px;
+  padding: 0;
+  background: #FFF;
+  color: #333;
+}
+
+body, td, th {
+  xfont-size: 90%;
+  font-family: Arial, Verdana, Helvetica, sans-serif;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ul li {
+  line-height: 15px;
+  padding-left: 15px;
+  padding-top: 0px;
+  background-image: url(../img/arrow.png) ;
+  background-repeat: no-repeat;
+  background-position: 0px 3px;
+}
+
+form {
+  margin: 0;
+  padding: 0;
+}
+
+.clr {
+  clear: both;
+}
+
+#main {
+  text-align: center;
+  margin: 0 auto;
+}
+
+#content {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #CCC;
+  background: #FFF;
+  padding: 2px;
+  text-align: left;
+}
+
+#header {
+  margin: 0;
+  padding: 40px 0 0 105px;
+  height: 65px;
+  background: url(../img/logo.gif) no-repeat;
+  text-align: left;
+  vertical-align: middle;
+  color: orange;
+  font-size: 1.25em; /* 20px; */
+  font-weight: bold;
+/*  line-height: 50px */
+}
+
+#rmenu {
+  float: right;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: 150px;
+}
+
+#rimenu {
+  border: 1px solid #CCC;
+  padding: 2px;
+  margin: 0;
+}
+
+#choices .space {
+  font-size:   0.75em;
+  font-weight: bold;
+  padding: 2px 8px 0 0;
+}
+
+#choices {
+  padding-left: 10px;
+}
+
+table td.body_outer {
+  padding: 2px;
+  border: 1px solid #CCC;
+}
+
+.back_button {
+  float: left;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 0.8em;
+  font-weight: bold;
+  border: 3px double #CCC;
+  width: auto;
+  background: url(../img/button_bg.png) repeat-x;
+  padding: 0 3px;
+  line-height: 16px;
+  margin: 1px;
+}
+
+.buttborder {
+  border: 3px double #CCC;
+  margin: 1px;
+  padding: 0;
+}
+
+.butt {
+  color: #A40;
+  background-color: #EEE;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  width: auto;
+  background: url(../img/button_bg.png) repeat-x;
+  border: 0;
+  padding: 0 0px;
+  margin: 0;
+  line-height: 20px;
+  height: 20px;
+  font-size: 1em;
+}
+
+.chosenButton {
+  color: #F60;
+  background-color: #EEE;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  width: auto;
+  background: url(../img/chosen_button_background.png) repeat-x;
+  border: 0;
+  padding: 0 0px;
+  margin: 0;
+  line-height: 20px;
+  height: 20px;
+  font-size: 1em;
+}
+
+.drop {
+  color: #F60;
+  background-color: #EEE;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.butt2 {
+  color: #F60;
+  background-color: #EEE;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.inputbox {
+  padding: 2px;
+  border: 1px solid #CCC;
+  background-color: #FFF;
+  font-size: 1em;
+}
+
+h1, h2, h3, table caption, .caption {
+  text-align: center;
+  padding: 0;
+  margin: 0em 0;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #A20;
+}
+
+h2 {
+  margin: 0.8em 0;
+  font-size: 0.9em;
+}
+
+h3 {
+  text-align: left;
+  margin: 0.8em 0 0.2em 0;
+  font-size: 0.8em;
+}
+
+dt, dd {
+  text-align: left;
+  margin: 0;
+}
+
+dt {
+  padding: 1px 0 0 5px;
+  font-size: 0.75em;
+  color: #A20;
+}
+
+dd {
+  padding: 0 0 0 22px;
+  font-size: 0.8em;
+  color: #333;
+  font-weight: bold;
+}
+
+.errorMessage {
+  font-size: 2em;
+  color:     #F00;
+  text-align: center;
+}
+
+.subtitle {
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+  text-align: center;
+}
+
+/* ---------- general ---------- */
+
+a:link, a:visited, a:active {
+  color: #F60;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #C30;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.whiteLink {
+  color: #FFF;
+  font-weight: bold;
+}
+
+
+/* ---------- competition ---------- */
+
+a.c:link, a.c:visited, a.c:active { color: #33F; }
+a.c:hover                         { color: #229; }
+
+/* ---------- future competition --- */
+
+a.fc:link, a.fc:visited, a.fc:active { color: #C6F; }
+a.fc:hover                           { color: #94C; }
+
+/* ---------- competition with reg - */
+
+a.rg:link, a.rg:visited, a.rg:active { color: #936; }
+a.rg:hover                           { color: #714; }
+
+/* ---------- person --------------- */
+
+a.p:link, a.p:visited, a.p:active { color: #F60; }
+a.p:hover                         { color: #C30; }
+
+/* ---------- event ---------------- */
+
+a.e:link, a.e:visited, a.e:active { color: #3A3; }
+a.e:hover                         { color: #262; }
+
+/* ---------- event (internal) ---------- */
+
+a.internalEvent:link, a.internalEvent:visited, a.internalEvent:active { color: #0AA; }
+a.internalEvent:hover                                                 { color: #077; }
+
+
+/* ---------- external ---------- */
+
+a.external:link, a.external:visited, a.external:active {
+  color: #66F;
+}
+
+a.external:hover {
+  color: #449;
+}
+
+/* ---------- email ---------- */
+
+a.email:link, a.email:visited, a.email:active {
+  color: #66F;
+}
+
+a.email:hover {
+  color: #449;
+}
+
+/* ---------- emptyLink ---------- */
+
+.emptyLink {
+  font-weight: bold;
+}
+
+
+#pageMenuFrame {
+  float:   right;
+  margin:  0;
+  padding: 0;
+  border:  0;
+}
+
+#pageMenu {
+  border:  1px solid #CCC;
+  padding: 2px;
+  margin:  0;
+}
+
+#activePage {
+  color:       #FC0;
+  font-weight: bold;
+}
+
+a#activePage:hover {
+  color: #E15704;
+}
+
+div.item {
+  overflow: hidden;
+  background: url(../img/menu_bg.png) 0% -25px no-repeat;
+}
+
+div.item a,
+div.item a:link,
+div.item a:visited {
+  display:         block;
+  background:      url(../img/menu_bg.png) 0% 0% no-repeat;
+  vertical-align:  middle;
+  font-size:       0.9em;
+  font-weight:     bold;
+  color:           #FFF;
+  text-align:      left;
+  padding-left:    18px;
+  padding-right:   10px;
+  height:          25px;
+  line-height:     25px;
+  text-decoration: none;
+}
+
+div.item a:hover {
+  background-image: none;
+  color: #333;
+}
+
+div.item a:active {
+  color: #000;
+}
+
+#competitionDetails {
+  margin: 20px 0 20px 0;
+  font-size: 0.85em;
+}
+
+#competitionDetails .key {
+  padding:        0px 10px 0 10px;
+  font-weight:    bold;
+  vertical-align: top;
+  white-space:    nowrap;
+}
+
+#competitionDetails .sub {
+  padding:        0px 10px 0 30px;
+  font-weight:    bold;
+  color:          #CCC;
+  vertical-align: top;
+  white-space:    nowrap;
+}
+
+#competitionDetails .choice {
+  padding:        0px 10px 0 10px;
+  font-weight:    bold;
+  vertical-align: middle;
+  white-space:    nowrap;
+}
+
+/* ------------------------------------------------------ */
+
+table.results caption {
+  text-align: left;
+  padding:    0.8em 0 0.2em 0;
+  margin:     0;
+  font-size:  0.85em;
+}
+
+.results .caption {
+  text-align: left;
+  padding:    0.2em 0 0.2em 5px;
+  margin:     0;
+  font-size:  0.85em;
+  text-weight: bold;
+}
+
+table.results {
+  width:   100%;
+  margin:  5px 0 5px 0;
+  padding: 0;
+}
+
+table.results th {
+  white-space:    nowrap;
+  background:     url(../img/subhead_bg.png) repeat-x;
+  color:          #666;
+  text-align:     left;
+  vertical-align: middle;
+  padding:        0 7px 0 7px;
+  height:         19px;
+  line-height:    19px;
+  font-weight:    bold;
+  font-size:      0.75em;
+  width:          auto;
+}
+
+.results th.f { width: 90% }
+
+.results td {
+  font-size:   0.75em;
+  padding:     0 7px 0 7px;
+  margin:      0;
+  white-space: nowrap;
+}
+
+.results td.r, .results th.r { text-align: right  }    /* stands for 'right-aligned' */
+.results td.l, .results th.l { text-align: left   }    /* stands for 'left-aligned' */
+.results td.c, .results th.c { text-align: center }    /* stands for 'centered' */
+
+.results td.R, .results th.R {
+  text-align:  right;
+  font-weight: bold;
+  padding: 0 0 0 7px;
+}
+
+.results td.R2, .results th.R2 {
+  text-align:  right;
+  font-weight: bold;
+}
+
+.results td.L, .results th.L {
+  text-align:  left;
+  font-weight: bold;
+}
+
+.results tr   { background-color: #FFF }
+.results tr.e { background-color: #EEE }   /* stands for 'even' */
+
+/* ------------------------------------------------------ */
+
+table.prereg {
+  padding:    5px;
+  margin:     auto auto 20px auto;
+  font-size:  0.85em;
+  xborder: 1px solid #CCC;
+}
+
+.prereg td {
+  border: 1px solid #CCC;
+  padding: 3px;
+  background: #EEF;
+  vertical-align: top;
+}
+
+.prereg input, .prereg select, .prereg textarea {
+  background-color: #FF9;
+}
+/* wca css end */
+
+/* custom yui settings */
+.wwgrp { line-height: 0.5em; }
+#resultsInfo, #resultsDiv {
+	font-size: 0.75em;
+}
+#resultsInfo {
+	margin: 5px 0;
+}
+.yui-skin-sam .yui-dt th {
+	background: url(../img/subhead_bg.png) repeat-x;
+}
+.yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
+	font-weight: bold;
+    color: #666;
+}
+.yui-dt0-col-rank div, .yui-dt0-col-best div, .yui-dt0-col-average div,
+.yui-dt0-col-result1 div, .yui-dt0-col-result2 div, .yui-dt0-col-result3 div, .yui-dt0-col-result4 div, .yui-dt0-col-result5 div { 
+    text-align: right;
+}
+#yui-dt0-th-result1-liner,
+#yui-dt0-th-result2-liner,
+#yui-dt0-th-result3-liner,
+#yui-dt0-th-result4-liner,
+#yui-dt0-th-result5-liner {
+    display: none;
+}
+.yui-skin-sam tr.yui-dt-even { background-color:#FFF; }
+.yui-skin-sam tr.yui-dt-odd { background-color:#EEE; }  
+.yui-skin-sam tr.yui-dt-even td.yui-dt-asc, 
+.yui-skin-sam tr.yui-dt-even td.yui-dt-desc { background-color:#DDD; }  
+.yui-skin-sam tr.yui-dt-odd td.yui-dt-asc, 
+.yui-skin-sam tr.yui-dt-odd td.yui-dt-desc { background-color:#999; }
+.yui-skin-sam th.yui-dt-highlighted, 
+.yui-skin-sam th.yui-dt-highlighted a { 
+    background-color:#AAA;
+}
+.yui-skin-sam tr.yui-dt-highlighted, 
+.yui-skin-sam tr.yui-dt-highlighted td.yui-dt-asc, 
+.yui-skin-sam tr.yui-dt-highlighted td.yui-dt-desc, 
+.yui-skin-sam tr.yui-dt-even td.yui-dt-highlighted, 
+.yui-skin-sam tr.yui-dt-odd td.yui-dt-highlighted { 
+    cursor:pointer; 
+    background-color:#AAA;  
+} 
+.yui-skin-sam .yui-dt-liner { padding: 3px 10px 3px 10px; }
+p { font-size: 0.9em; }
+dd { margin-bottom: 10px; }
+.formTable td { padding-bottom: 10px; }
+#content {
+  width: 93%;
+}
+a.butt {
+  color: #A40;
+  background-color: #EEE;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  width: auto;
+  background: url(../img/button_bg.png) repeat-x;
+  border: 0;
+  padding: 0 0px;
+  margin: 0;
+  line-height: 20px;
+  height: 20px;
+  font-size: 1em;
+  display: block;
+}

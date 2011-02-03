@@ -6,7 +6,7 @@
     <head>
         <title><s:text name="results.title" /></title>
 		
-		<link rel="stylesheet" type="text/css" charset="UTF-8" href="<c:url value='/js/yui_2.8.0r4/build/datatable/assets/skins/sam/datatable.css'/>" />
+		<link rel="stylesheet" type="text/css" charset="UTF-8" href="<c:url value='/js/yui_2.8.2r1/build/datatable/assets/skins/sam/datatable.css'/>" />
 		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js'/>"></script>
 		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.0r4/build/connection/connection-min.js'/>"></script>
 		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.0r4/build/json/json-min.js'/>"></script>

@@ -7,12 +7,12 @@
         <title><s:text name="results.title" /></title>
 		
 		<link rel="stylesheet" type="text/css" charset="UTF-8" href="<c:url value='/js/yui_2.8.2r1/build/datatable/assets/skins/sam/datatable.css'/>" />
-		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js'/>"></script>
-		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.0r4/build/connection/connection-min.js'/>"></script>
-		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.0r4/build/json/json-min.js'/>"></script>
-		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.0r4/build/element/element-min.js'/>"></script>
-		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.0r4/build/datasource/datasource-min.js'/>"></script>
-		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.0r4/build/datatable/datatable-min.js'/>"></script>
+		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.2r1/build/yahoo-dom-event/yahoo-dom-event.js'/>"></script>
+		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.2r1/build/connection/connection-min.js'/>"></script>
+		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.2r1/build/json/json-min.js'/>"></script>
+		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.2r1/build/element/element-min.js'/>"></script>
+		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.2r1/build/datasource/datasource-min.js'/>"></script>
+		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/yui_2.8.2r1/build/datatable/datatable-min.js'/>"></script>
 		
 		<script type="text/javascript" charset="UTF-8" src="<c:url value='/js/results.js'/>"></script>
     </head>

@@ -45,7 +45,7 @@ public class CountryUtilTest {
 	public void testGetCountryByCode() {
 		assertNull(countryUtil.getCountryByCode(null));
 		assertNull(countryUtil.getCountryByCode(""));
-		assertNull(countryUtil.getCountryByCode("ÅÅ")); // non-existing country
+		assertNull(countryUtil.getCountryByCode("DoNotExist")); // non-existing country
 		for (int i=0; i<countryCodes.length; i++) {
 			String name = countryUtil.getCountryByCode(countryCodes[i]);
 			assertNotNull(name);
@@ -60,7 +60,7 @@ public class CountryUtilTest {
 	public void testGetCountryCodeByName() {
 		assertNull(countryUtil.getCountryCodeByName(null));
 		assertNull(countryUtil.getCountryCodeByName(""));
-		assertNull(countryUtil.getCountryCodeByName("ÅÅ")); // non-existing country
+		assertNull(countryUtil.getCountryCodeByName("DoNotExist")); // non-existing country
 		for (int i=0; i<countryNames.length; i++) {
 			String code = countryUtil.getCountryCodeByName(countryNames[i]);
 			assertNotNull(code);

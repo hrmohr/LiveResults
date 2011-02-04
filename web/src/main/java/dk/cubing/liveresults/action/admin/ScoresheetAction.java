@@ -182,8 +182,20 @@ public class ScoresheetAction extends FrontendAction {
 		eventNamesMap.put("333fm", setupEvent("fm", Event.Format.BEST_OF_1.getValue(), Event.TimeFormat.NUMBER.getValue()));
 		
 		// unofficial events
-		eventNamesMap.put("333ni", setupEvent("no inspect", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
-		eventNamesMap.put("333row", setupEvent("3 in a row", Event.Format.BEST_OF_1.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("333ni", setupEvent("3x3 no inspection", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("333sbf", setupEvent("3x3 speed blindfolded", Event.Format.BEST_OF_3.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("333r3", setupEvent("3x3 3 in a row", Event.Format.BEST_OF_1.getValue(), Event.TimeFormat.MINUTES.getValue()));
+		eventNamesMap.put("333ts", setupEvent("3x3 team solving", Event.Format.BEST_OF_3.getValue(), Event.TimeFormat.MINUTES.getValue()));
+		eventNamesMap.put("333bts", setupEvent("3x3 blindfolded team solving", Event.Format.BEST_OF_3.getValue(), Event.TimeFormat.MINUTES.getValue()));
+		eventNamesMap.put("222bf", setupEvent("2x2 blindfolded", Event.Format.BEST_OF_3.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("333si", setupEvent("Siamese Cube", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("rainb", setupEvent("Rainbow Cube", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("snake", setupEvent("Rubik\'s Snake", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("skewb", setupEvent("Skewb", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("mirbl", setupEvent("Mirror Blocks", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("222oh", setupEvent("2x2 one-handed", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("magico", setupEvent("Magic one-handed", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("360", setupEvent("360", Event.Format.AVERAGE.getValue(), Event.TimeFormat.MINUTES.getValue()));
 		
 		// round types map
 		roundTypesMap.put("0", "Qualification round");

@@ -66,7 +66,9 @@ public class CompetitorDAO extends GenericDAO<Competitor, Integer> {
 			 "SELECT SUM(e.signedUpFor2x2), SUM(e.signedUpFor3x3), SUM(e.signedUpFor4x4), SUM(e.signedUpFor5x5), SUM(e.signedUpFor6x6), "
 			 + "SUM(e.signedUpFor7x7), SUM(e.signedUpForFm), SUM(e.signedUpForOh), SUM(e.signedUpForBf), SUM(e.signedUpForBf4), SUM(e.signedUpForBf5), "
 			 + "SUM(e.signedUpForFeet), SUM(e.signedUpForClk), SUM(e.signedUpForMgc), SUM(e.signedUpForMmgc), SUM(e.signedUpForMinx), SUM(e.signedUpForSq1), "
-			 + "SUM(e.signedUpForPyr), SUM(e.signedUpForMbf) "
+			 + "SUM(e.signedUpForPyr), SUM(e.signedUpForMbf), SUM(e.signedUpFor333ni), SUM(e.signedUpFor333sbf), SUM(e.signedUpFor333r3), SUM(e.signedUpFor333ts), "
+			 + "SUM(e.signedUpFor333bts), SUM(e.signedUpFor222bf), SUM(e.signedUpFor333si), SUM(e.signedUpForRainb), SUM(e.signedUpForSnake), SUM(e.signedUpForSkewb), "
+			 + "SUM(e.signedUpForMirbl), SUM(e.signedUpFor222oh), SUM(e.signedUpForMagico), SUM(e.signedUpFor360) "
 			 + "FROM wca_competitors c, wca_registered_events e "
 			 + "WHERE c.competitionId = :competitionId "
 			 + "AND c.registeredEventsId = e.id";

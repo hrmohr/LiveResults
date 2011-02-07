@@ -144,13 +144,13 @@ public class WcaParser extends ExcelParser {
 					log.debug("Validating: {}", sheet.getSheetName());
 					isValid = isValidResultSheet(sheet);
 					if (!isValid) {
-						log.info("Invalid result sheet: {}", sheet.getSheetName());
+						log.warn("[{}] Invalid result sheet", sheet.getSheetName());
 						break;
 					}
 				}
 			}
 		} else {
-			log.info("Invalid registration sheet");
+			log.warn("[{}] Invalid registration sheet", regSheet.getSheetName());
 		}
 		
 		return isValid;
@@ -513,8 +513,13 @@ public class WcaParser extends ExcelParser {
 	private Result parseResultRow(Row row, Event event) throws IllegalStateException {
 		Result result = new Result();
 		
-		// competitor data
-		parseCompetitorData(row, result);
+		// competitor data for teams
+		if (event.getName().toLowerCase().contains("team")) {
+			parseTeamCompetitorData(row, result);
+		// normal competitors
+		} else {
+			parseCompetitorData(row, result);
+		}
 		
 		// only parse results for competitors with a name / country
 		if (result.getFirstname() != null && result.getSurname() != null && result.getCountry() != null) {
@@ -533,6 +538,34 @@ public class WcaParser extends ExcelParser {
 					result.setResult2(parseResultCell(row, 8));
 					result.setBest(parseResultCell(row, 9));
 					result.setRegionalSingleRecord(parseRecordCell(row, 10));
+					
+				// unsupported format
+				} else {
+					log.warn("[{}] Unsupported format: {}", row.getSheet().getSheetName(), event.getFormat());
+				}
+				
+			// handle special team events
+			} else if (event.getName().toLowerCase().contains("team")) {
+				// best of 1
+				if (Event.Format.BEST_OF_1.getValue().equals(event.getFormat())) {
+					result.setResult1(parseResultCell(row, 3+1));
+					result.setBest(result.getResult1());
+					result.setRegionalSingleRecord(parseRecordCell(row, 3+2));
+					
+				// best of 2
+				} else if (Event.Format.BEST_OF_2.getValue().equals(event.getFormat())) {
+					result.setResult1(parseResultCell(row, 3+1));
+					result.setResult2(parseResultCell(row, 3+2));
+					result.setBest(parseResultCell(row, 3+3));
+					result.setRegionalSingleRecord(parseRecordCell(row, 3+4));
+					
+				// best of 3
+				} else if (Event.Format.BEST_OF_3.getValue().equals(event.getFormat())) {
+					result.setResult1(parseResultCell(row, 3+1));
+					result.setResult2(parseResultCell(row, 3+2));
+					result.setResult3(parseResultCell(row, 3+3));
+					result.setBest(parseResultCell(row, 3+4));
+					result.setRegionalSingleRecord(parseRecordCell(row, 3+5));
 					
 				// unsupported format
 				} else {
@@ -588,7 +621,7 @@ public class WcaParser extends ExcelParser {
 				log.error("[{}] Unsupported format: {}", row.getSheet().getSheetName(), event.getFormat());
 			}
 		} else {
-			log.debug("Skipping results for competitor with no name and/or country: Row: {}", row.getRowNum());
+			log.debug("[{}] Skipping results for competitor with no name and/or country: Row: {}", row.getSheet().getSheetName(), row.getRowNum());
 		}
 		return result;
 	}
@@ -787,6 +820,78 @@ public class WcaParser extends ExcelParser {
 						}
 					}
 					break;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * @param row
+	 * @param result
+	 * @throws IllegalStateException
+	 */
+	private void parseTeamCompetitorData(Row row, Result result) throws IllegalStateException {
+		Cell nameCell1 = row.getCell(1);
+		Cell nameCell2 = row.getCell(1+3);
+		if ((nameCell1 != null && nameCell1.getCellType() != Cell.CELL_TYPE_BLANK) && (nameCell2 != null && nameCell2.getCellType() != Cell.CELL_TYPE_BLANK)) {
+			String name1 = nameCell1.getStringCellValue();
+			String name2 = nameCell2.getStringCellValue();
+			if (name1 != null && name2 != null) {
+				name1 = StringUtil.ucwords(name1);
+				name2 = StringUtil.ucwords(name2);
+				if (name1.lastIndexOf(' ') != -1 && name2.lastIndexOf(' ') != -1) {
+					result.setFirstname(StringUtil.parseFirstname(name1) + " / " + StringUtil.parseFirstname(name2));
+					result.setSurname(StringUtil.parseSurname(name1) + " / " + StringUtil.parseSurname(name2));
+					log.debug("Found result for : {} / {}", name1, name2);
+				} else {
+					log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+				}
+			}
+		}
+		
+		Cell countryCell1 = row.getCell(2);
+		Cell countryCell2 = row.getCell(2+3);
+		if ((countryCell1 != null && countryCell1.getCellType() != Cell.CELL_TYPE_BLANK) && (countryCell2 != null && countryCell2.getCellType() != Cell.CELL_TYPE_BLANK)) {
+			String country1 = countryCell1.getStringCellValue();
+			String country2 = countryCell2.getStringCellValue();
+			if (country1 != null && country2 != null) {
+				String countryCode1 = null;
+				String countryCode2 = null;
+				if (country1.length() > 2 && country2.length() > 2) {
+					countryCode1 = getCountryUtil().getCountryCodeByName(country1);
+					countryCode2 = getCountryUtil().getCountryCodeByName(country2);
+				} else {
+					countryCode1 = getCountryUtil().getCountryByCode(country1);
+					countryCode2 = getCountryUtil().getCountryByCode(country2);
+				}
+				if (countryCode1 != null && countryCode2 != null) { 
+					result.setCountry(countryCode1); //TODO: for now we only support 1 country
+					log.debug("Country: {} - {} / {} - {}", new Object[]{countryCode1, country1, countryCode1, country1});
+				} else {
+					log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+				}
+			}
+		}
+		
+		Cell wcaIdCell1 = row.getCell(3);
+		Cell wcaIdCell2 = row.getCell(3+3);
+		if ((wcaIdCell1 != null && wcaIdCell1.getCellType() != Cell.CELL_TYPE_BLANK) && (wcaIdCell2 != null && wcaIdCell2.getCellType() != Cell.CELL_TYPE_BLANK)) {
+			String wcaId1 = wcaIdCell1.getStringCellValue();
+			String wcaId2 = wcaIdCell2.getStringCellValue();
+			if (wcaId1 != null && wcaId2 != null) {
+				wcaId1 = wcaId1.trim();
+				wcaId2 = wcaId2.trim();
+				if (wcaId1.length() == 10 && wcaId2.length() == 10) {
+					Matcher m1 = wcaIdPattern.matcher(wcaId1);
+					Matcher m2 = wcaIdPattern.matcher(wcaId2);
+					if (m1.find() && m2.find()) {
+						result.setWcaId(wcaId1); // FIXME: for now only 1 wcaId are supported 
+						log.debug("WCA Id: {} / {}", wcaId1, wcaId2);
+					} else {
+						log.warn("[{}] Invalid wcaId format: {} / {}", new Object[]{row.getSheet().getSheetName(), wcaId1, wcaId2});
+					}
+				} else {
+					log.warn("[{}] Entered WCA id has wrong length. Expected: 10, Was: {} / {}. Row: {}", new Object[]{row.getSheet().getSheetName(), wcaId1.length(), wcaId2.length(), row.getRowNum()});
 				}
 			}
 		}

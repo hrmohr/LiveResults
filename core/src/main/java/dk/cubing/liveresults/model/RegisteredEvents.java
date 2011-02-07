@@ -52,6 +52,20 @@ public class RegisteredEvents {
 	private boolean signedUpForSq1 = false;
 	private boolean signedUpForPyr = false;
 	private boolean signedUpForMbf = false;
+	private boolean signedUpFor333ni = false;
+	private boolean signedUpFor333sbf = false;
+	private boolean signedUpFor333r3 = false;
+	private boolean signedUpFor333ts = false;
+	private boolean signedUpFor333bts = false;
+	private boolean signedUpFor222bf = false;
+	private boolean signedUpFor333si = false;
+	private boolean signedUpForRainb = false;
+	private boolean signedUpForSnake = false;
+	private boolean signedUpForSkewb = false;
+	private boolean signedUpForMirbl = false;
+	private boolean signedUpFor222oh = false;
+	private boolean signedUpForMagico = false;
+	private boolean signedUpFor360 = false;
 	
 	/**
 	 * @return the id
@@ -295,6 +309,175 @@ public class RegisteredEvents {
 	}
 	
 	/**
+	 * @return the signedUpFor333ni
+	 */
+	public boolean isSignedUpFor333ni() {
+		return signedUpFor333ni;
+	}
+	/**
+	 * @param signedUpFor333ni the signedUpFor333ni to set
+	 */
+	public void setSignedUpFor333ni(boolean signedUpFor333ni) {
+		this.signedUpFor333ni = signedUpFor333ni;
+	}
+	/**
+	 * @return the signedUpFor333sbf
+	 */
+	public boolean isSignedUpFor333sbf() {
+		return signedUpFor333sbf;
+	}
+	/**
+	 * @param signedUpFor333sbf the signedUpFor333sbf to set
+	 */
+	public void setSignedUpFor333sbf(boolean signedUpFor333sbf) {
+		this.signedUpFor333sbf = signedUpFor333sbf;
+	}
+	/**
+	 * @return the signedUpFor333r3
+	 */
+	public boolean isSignedUpFor333r3() {
+		return signedUpFor333r3;
+	}
+	/**
+	 * @param signedUpFor333r3 the signedUpFor333r3 to set
+	 */
+	public void setSignedUpFor333r3(boolean signedUpFor333r3) {
+		this.signedUpFor333r3 = signedUpFor333r3;
+	}
+	/**
+	 * @return the signedUpFor333ts
+	 */
+	public boolean isSignedUpFor333ts() {
+		return signedUpFor333ts;
+	}
+	/**
+	 * @param signedUpFor333ts the signedUpFor333ts to set
+	 */
+	public void setSignedUpFor333ts(boolean signedUpFor333ts) {
+		this.signedUpFor333ts = signedUpFor333ts;
+	}
+	/**
+	 * @return the signedUpFor333bts
+	 */
+	public boolean isSignedUpFor333bts() {
+		return signedUpFor333bts;
+	}
+	/**
+	 * @param signedUpFor333bts the signedUpFor333bts to set
+	 */
+	public void setSignedUpFor333bts(boolean signedUpFor333bts) {
+		this.signedUpFor333bts = signedUpFor333bts;
+	}
+	/**
+	 * @return the signedUpFor222bf
+	 */
+	public boolean isSignedUpFor222bf() {
+		return signedUpFor222bf;
+	}
+	/**
+	 * @param signedUpFor222bf the signedUpFor222bf to set
+	 */
+	public void setSignedUpFor222bf(boolean signedUpFor222bf) {
+		this.signedUpFor222bf = signedUpFor222bf;
+	}
+	/**
+	 * @return the signedUpFor333si
+	 */
+	public boolean isSignedUpFor333si() {
+		return signedUpFor333si;
+	}
+	/**
+	 * @param signedUpFor333si the signedUpFor333si to set
+	 */
+	public void setSignedUpFor333si(boolean signedUpFor333si) {
+		this.signedUpFor333si = signedUpFor333si;
+	}
+	/**
+	 * @return the signedUpForRainb
+	 */
+	public boolean isSignedUpForRainb() {
+		return signedUpForRainb;
+	}
+	/**
+	 * @param signedUpForRainb the signedUpForRainb to set
+	 */
+	public void setSignedUpForRainb(boolean signedUpForRainb) {
+		this.signedUpForRainb = signedUpForRainb;
+	}
+	/**
+	 * @return the signedUpForSnake
+	 */
+	public boolean isSignedUpForSnake() {
+		return signedUpForSnake;
+	}
+	/**
+	 * @param signedUpForSnake the signedUpForSnake to set
+	 */
+	public void setSignedUpForSnake(boolean signedUpForSnake) {
+		this.signedUpForSnake = signedUpForSnake;
+	}
+	/**
+	 * @return the signedUpForSkewb
+	 */
+	public boolean isSignedUpForSkewb() {
+		return signedUpForSkewb;
+	}
+	/**
+	 * @param signedUpForSkewb the signedUpForSkewb to set
+	 */
+	public void setSignedUpForSkewb(boolean signedUpForSkewb) {
+		this.signedUpForSkewb = signedUpForSkewb;
+	}
+	/**
+	 * @return the signedUpForMirbl
+	 */
+	public boolean isSignedUpForMirbl() {
+		return signedUpForMirbl;
+	}
+	/**
+	 * @param signedUpForMirbl the signedUpForMirbl to set
+	 */
+	public void setSignedUpForMirbl(boolean signedUpForMirbl) {
+		this.signedUpForMirbl = signedUpForMirbl;
+	}
+	/**
+	 * @return the signedUpFor222oh
+	 */
+	public boolean isSignedUpFor222oh() {
+		return signedUpFor222oh;
+	}
+	/**
+	 * @param signedUpFor222oh the signedUpFor222oh to set
+	 */
+	public void setSignedUpFor222oh(boolean signedUpFor222oh) {
+		this.signedUpFor222oh = signedUpFor222oh;
+	}
+	/**
+	 * @return the signedUpForMagico
+	 */
+	public boolean isSignedUpForMagico() {
+		return signedUpForMagico;
+	}
+	/**
+	 * @param signedUpForMagico the signedUpForMagico to set
+	 */
+	public void setSignedUpForMagico(boolean signedUpForMagico) {
+		this.signedUpForMagico = signedUpForMagico;
+	}
+	/**
+	 * @return the signedUpFor360
+	 */
+	public boolean isSignedUpFor360() {
+		return signedUpFor360;
+	}
+	/**
+	 * @param signedUpFor360 the signedUpFor360 to set
+	 */
+	public void setSignedUpFor360(boolean signedUpFor360) {
+		this.signedUpFor360 = signedUpFor360;
+	}
+	
+	/**
 	 * @return
 	 */
 	@Transient
@@ -318,7 +501,21 @@ public class RegisteredEvents {
 			signedUpForMinx ||
 			signedUpForSq1 ||
 			signedUpForPyr ||
-			signedUpForMbf;
+			signedUpForMbf ||
+			signedUpFor333ni ||
+			signedUpFor333sbf ||
+			signedUpFor333r3 ||
+			signedUpFor333ts ||
+			signedUpFor333bts ||
+			signedUpFor222bf ||
+			signedUpFor333si ||
+			signedUpForRainb ||
+			signedUpForSnake ||
+			signedUpForSkewb ||
+			signedUpForMirbl ||
+			signedUpFor222oh ||
+			signedUpForMagico ||
+			signedUpFor360;
 	}
 	
 	/**
@@ -346,6 +543,20 @@ public class RegisteredEvents {
 		if (signedUpForSq1) result++;
 		if (signedUpForPyr) result++;
 		if (signedUpForMbf) result++;
+		if (signedUpFor333ni) result++;
+		if (signedUpFor333sbf) result++;
+		if (signedUpFor333r3) result++;
+		if (signedUpFor333ts) result++;
+		if (signedUpFor333bts) result++;
+		if (signedUpFor222bf) result++;
+		if (signedUpFor333si) result++;
+		if (signedUpForRainb) result++;
+		if (signedUpForSnake) result++;
+		if (signedUpForSkewb) result++;
+		if (signedUpForMirbl) result++;
+		if (signedUpFor222oh) result++;
+		if (signedUpForMagico) result++;
+		if (signedUpFor360) result++;
 		return result;
 	}
 	
@@ -374,6 +585,20 @@ public class RegisteredEvents {
 		row.add(isSignedUpForSq1());
 		row.add(isSignedUpForPyr());
 		row.add(isSignedUpForMbf());
+		row.add(isSignedUpFor333ni());
+		row.add(isSignedUpFor333sbf());
+		row.add(isSignedUpFor333r3());
+		row.add(isSignedUpFor333ts());
+		row.add(isSignedUpFor333bts());
+		row.add(isSignedUpFor222bf());
+		row.add(isSignedUpFor333si());
+		row.add(isSignedUpForRainb());
+		row.add(isSignedUpForSnake());
+		row.add(isSignedUpForSkewb());
+		row.add(isSignedUpForMirbl());
+		row.add(isSignedUpFor222oh());
+		row.add(isSignedUpForMagico());
+		row.add(isSignedUpFor360());
 		return row;
 	}
 	
@@ -403,6 +628,20 @@ public class RegisteredEvents {
 		result = prime * result + (signedUpForOh ? 1231 : 1237);
 		result = prime * result + (signedUpForPyr ? 1231 : 1237);
 		result = prime * result + (signedUpForSq1 ? 1231 : 1237);
+		result = prime * result + (signedUpFor333ni ? 1231 : 1237);
+		result = prime * result + (signedUpFor333sbf ? 1231 : 1237);
+		result = prime * result + (signedUpFor333r3 ? 1231 : 1237);
+		result = prime * result + (signedUpFor333ts ? 1231 : 1237);
+		result = prime * result + (signedUpFor333bts ? 1231 : 1237);
+		result = prime * result + (signedUpFor222bf ? 1231 : 1237);
+		result = prime * result + (signedUpFor333si ? 1231 : 1237);
+		result = prime * result + (signedUpForRainb ? 1231 : 1237);
+		result = prime * result + (signedUpForSnake ? 1231 : 1237);
+		result = prime * result + (signedUpForSkewb ? 1231 : 1237);
+		result = prime * result + (signedUpForMirbl ? 1231 : 1237);
+		result = prime * result + (signedUpFor222oh ? 1231 : 1237);
+		result = prime * result + (signedUpForMagico ? 1231 : 1237);
+		result = prime * result + (signedUpFor360 ? 1231 : 1237);
 		return result;
 	}
 	/* (non-Javadoc)
@@ -454,6 +693,34 @@ public class RegisteredEvents {
 		if (signedUpForPyr != other.signedUpForPyr)
 			return false;
 		if (signedUpForSq1 != other.signedUpForSq1)
+			return false;
+		if (signedUpFor333ni != other.signedUpFor333ni)
+			return false;
+		if (signedUpFor333sbf != other.signedUpFor333sbf)
+			return false;
+		if (signedUpFor333r3 != other.signedUpFor333r3)
+			return false;
+		if (signedUpFor333ts != other.signedUpFor333ts)
+			return false;
+		if (signedUpFor333bts != other.signedUpFor333bts)
+			return false;
+		if (signedUpFor222bf != other.signedUpFor222bf)
+			return false;
+		if (signedUpFor333si != other.signedUpFor333si)
+			return false;
+		if (signedUpForRainb != other.signedUpForRainb)
+			return false;
+		if (signedUpForSnake != other.signedUpForSnake)
+			return false;
+		if (signedUpForSkewb != other.signedUpForSkewb)
+			return false;
+		if (signedUpForMirbl != other.signedUpForMirbl)
+			return false;
+		if (signedUpFor222oh != other.signedUpFor222oh)
+			return false;
+		if (signedUpForMagico != other.signedUpForMagico)
+			return false;
+		if (signedUpFor360 != other.signedUpFor360)
 			return false;
 		return true;
 	}	

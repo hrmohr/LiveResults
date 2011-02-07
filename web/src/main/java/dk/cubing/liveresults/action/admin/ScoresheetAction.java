@@ -79,10 +79,15 @@ public class ScoresheetAction extends FrontendAction {
 	private final String SHEET_TYPE_BEST1S = "best1s";
 	private final String SHEET_TYPE_BEST1M = "best1m";
 	private final String SHEET_TYPE_BEST1N = "best1n";
+	private final String SHEET_TYPE_TEAMBEST1M = "teambest1m";
 	private final String SHEET_TYPE_BEST2S = "best2s";
 	private final String SHEET_TYPE_BEST2M = "best2m";
+	private final String SHEET_TYPE_BEST2N = "best2n";
+	private final String SHEET_TYPE_TEAMBEST2M = "teambest2m";
 	private final String SHEET_TYPE_BEST3S = "best3s";
 	private final String SHEET_TYPE_BEST3M = "best3m";
+	private final String SHEET_TYPE_BEST3N = "best3n";
+	private final String SHEET_TYPE_TEAMBEST3M = "teambest3m";
 	private final String SHEET_TYPE_MULTIBF1 = "multibf1";
 	private final String SHEET_TYPE_MULTIBF2 = "multibf2";
 	
@@ -182,19 +187,19 @@ public class ScoresheetAction extends FrontendAction {
 		eventNamesMap.put("333fm", setupEvent("fm", Event.Format.BEST_OF_1.getValue(), Event.TimeFormat.NUMBER.getValue()));
 		
 		// unofficial events
-		eventNamesMap.put("333ni", setupEvent("3x3 no inspection", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
-		eventNamesMap.put("333sbf", setupEvent("3x3 speed blindfolded", Event.Format.BEST_OF_3.getValue(), Event.TimeFormat.SECONDS.getValue()));
-		eventNamesMap.put("333r3", setupEvent("3x3 3 in a row", Event.Format.BEST_OF_1.getValue(), Event.TimeFormat.MINUTES.getValue()));
-		eventNamesMap.put("333ts", setupEvent("3x3 team solving", Event.Format.BEST_OF_3.getValue(), Event.TimeFormat.MINUTES.getValue()));
-		eventNamesMap.put("333bts", setupEvent("3x3 blindfolded team solving", Event.Format.BEST_OF_3.getValue(), Event.TimeFormat.MINUTES.getValue()));
-		eventNamesMap.put("222bf", setupEvent("2x2 blindfolded", Event.Format.BEST_OF_3.getValue(), Event.TimeFormat.SECONDS.getValue()));
-		eventNamesMap.put("333si", setupEvent("Siamese Cube", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
-		eventNamesMap.put("rainb", setupEvent("Rainbow Cube", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
-		eventNamesMap.put("snake", setupEvent("Rubik\'s Snake", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
-		eventNamesMap.put("skewb", setupEvent("Skewb", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
-		eventNamesMap.put("mirbl", setupEvent("Mirror Blocks", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
-		eventNamesMap.put("222oh", setupEvent("2x2 one-handed", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
-		eventNamesMap.put("magico", setupEvent("Magic one-handed", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("333ni", setupEvent("333ni", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("333sbf", setupEvent("333sbf", Event.Format.BEST_OF_3.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("333r3", setupEvent("333r3", Event.Format.BEST_OF_1.getValue(), Event.TimeFormat.MINUTES.getValue()));
+		eventNamesMap.put("333ts", setupEvent("333ts", Event.Format.BEST_OF_1.getValue(), Event.TimeFormat.TEAM.getValue()));
+		eventNamesMap.put("333bts", setupEvent("333bts", Event.Format.BEST_OF_1.getValue(), Event.TimeFormat.TEAM.getValue()));
+		eventNamesMap.put("222bf", setupEvent("222bf", Event.Format.BEST_OF_3.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("333si", setupEvent("333si", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("rainb", setupEvent("rainb", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("snake", setupEvent("snake", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("skewb", setupEvent("skewb", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("mirbl", setupEvent("mirbl", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("222oh", setupEvent("222oh", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
+		eventNamesMap.put("magico", setupEvent("magico", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
 		eventNamesMap.put("360", setupEvent("360", Event.Format.AVERAGE.getValue(), Event.TimeFormat.MINUTES.getValue()));
 		
 		// round types map
@@ -218,6 +223,7 @@ public class ScoresheetAction extends FrontendAction {
 		timeFormatTypesMap.put("m", "Minutes");
 		timeFormatTypesMap.put("n", "Number");
 		timeFormatTypesMap.put("b", "Multi BLD");
+		timeFormatTypesMap.put("t", "Team");
 	}
 	
 	/**
@@ -664,6 +670,8 @@ public class ScoresheetAction extends FrontendAction {
 				log.error("Unsupported format: Fewest moves uses Best of and not Average.");
 			} else if (Event.TimeFormat.MULTI_BLD.getValue().equals(timeFormat)) {
 				log.error("Unsupported format: Multi BLD uses Best of and not Average.");
+			} else if (Event.TimeFormat.TEAM.getValue().equals(timeFormat)) {
+				log.error("Unsupported format: Team events uses Best of and not Average.");
 			} else {
 				log.error("Unknown format: {}, time format: {}", format, timeFormat);
 			}
@@ -676,6 +684,8 @@ public class ScoresheetAction extends FrontendAction {
 				log.error("Unsupported format: Fewest moves uses Best of and not Mean.");
 			} else if (Event.TimeFormat.MULTI_BLD.getValue().equals(timeFormat)) {
 				log.error("Unsupported format: Multi BLD uses Best of and not Mean.");
+			} else if (Event.TimeFormat.TEAM.getValue().equals(timeFormat)) {
+				log.error("Unsupported format: Team events uses Best of and not Mean.");
 			} else {
 				log.error("Unknown format: {}, time format: {}", format, timeFormat);
 			}
@@ -688,6 +698,8 @@ public class ScoresheetAction extends FrontendAction {
 				sheet = workBook.getSheet(SHEET_TYPE_BEST1N);
 			} else if (Event.TimeFormat.MULTI_BLD.getValue().equals(timeFormat)) {
 				sheet = workBook.getSheet(SHEET_TYPE_MULTIBF1);
+			} else if (Event.TimeFormat.TEAM.getValue().equals(timeFormat)) {
+				sheet = workBook.getSheet(SHEET_TYPE_TEAMBEST1M);
 			} else {
 				log.error("Unknown format: {}, time format: {}", format, timeFormat);
 			}
@@ -697,9 +709,11 @@ public class ScoresheetAction extends FrontendAction {
 			} else if (Event.TimeFormat.MINUTES.getValue().equals(timeFormat)) {
 				sheet = workBook.getSheet(SHEET_TYPE_BEST2M);
 			} else if (Event.TimeFormat.NUMBER.getValue().equals(timeFormat)) {
-				log.error("Unsupported format: Fewest moves uses Best of 1 and not Best of 2.");
+				sheet = workBook.getSheet(SHEET_TYPE_BEST2N);
 			} else if (Event.TimeFormat.MULTI_BLD.getValue().equals(timeFormat)) {
 				sheet = workBook.getSheet(SHEET_TYPE_MULTIBF2);
+			} else if (Event.TimeFormat.TEAM.getValue().equals(timeFormat)) {
+				sheet = workBook.getSheet(SHEET_TYPE_TEAMBEST2M);
 			} else {
 				log.error("Unknown format: {}, time format: {}", format, timeFormat);
 			}
@@ -709,9 +723,11 @@ public class ScoresheetAction extends FrontendAction {
 			} else if (Event.TimeFormat.MINUTES.getValue().equals(timeFormat)) {
 				sheet = workBook.getSheet(SHEET_TYPE_BEST3M);
 			} else if (Event.TimeFormat.NUMBER.getValue().equals(timeFormat)) {
-				log.error("Unsupported format: Fewest moves uses Best of 1 and not Best of 3.");
+				sheet = workBook.getSheet(SHEET_TYPE_BEST3N);
 			} else if (Event.TimeFormat.MULTI_BLD.getValue().equals(timeFormat)) {
 				log.error("Unsupported format: Multi BLD uses Best of 1 or Best of 2 and not Best of 3.");
+			} else if (Event.TimeFormat.TEAM.getValue().equals(timeFormat)) {
+				sheet = workBook.getSheet(SHEET_TYPE_TEAMBEST3M);
 			} else {
 				log.error("Unknown format: {}, time format: {}", format, timeFormat);
 			}
@@ -848,7 +864,7 @@ public class ScoresheetAction extends FrontendAction {
 		
 		// adjust competitors count per event
 		if (SHEET_TYPE_REGISTRATION.equals(sheet.getSheetName())) {
-			for (int i=0; i<19; i++) {
+			for (int i=0; i<33; i++) { //FIXME: support unofficial events
 				Cell count = getCell(sheet, 1, 7+i, Cell.CELL_TYPE_FORMULA);
 				String ref = (char)('H' + i) + "4:" + (char)('H' + i) + line;
 				count.setCellFormula("SUM("+ref+")");
@@ -877,6 +893,7 @@ public class ScoresheetAction extends FrontendAction {
 			
 			// get sheet template
 			Sheet template = getResultSheet(workBook, formats.get(i), timeFormats.get(i));
+			boolean isTeamEvent = Event.TimeFormat.TEAM.getValue().equals(event.getTimeFormat());
 			if (template != null) {
 				// this order handles the order of which the result sheets appear
 				if (!round4.isEmpty() && !"-1".equals(round4.get(i))) {
@@ -889,7 +906,7 @@ public class ScoresheetAction extends FrontendAction {
 					createResultSheetFromTemplate(workBook, template, competition, event, round2.get(i), false);
 				}
 				if (!round1.isEmpty() && !"-1".equals(round1.get(i))) {
-					createResultSheetFromTemplate(workBook, template, competition, event, round1.get(i), true);
+					createResultSheetFromTemplate(workBook, template, competition, event, round1.get(i), !isTeamEvent);
 				}
 				
 			} else {
@@ -1015,7 +1032,15 @@ public class ScoresheetAction extends FrontendAction {
 						rank.setCellFormula("IF(COUNTBLANK(B"+(i+5)+")>0,\"\",IF(E"+(i+4)+"=E"+(i+5)+",A"+(i+4)+",ROW()-4))");
 						break;
 					}
-				} else if (SHEET_TYPE_BEST2S.equals(template.getSheetName()) || SHEET_TYPE_BEST2M.equals(template.getSheetName())) {
+				} else if (SHEET_TYPE_TEAMBEST1M.equals(template.getSheetName())) {
+					switch (j) {
+					// rank
+					case 0:
+						Cell rank = getCell(resultSheet, i+4, j, Cell.CELL_TYPE_FORMULA);
+						rank.setCellFormula("IF(COUNTBLANK(B"+(i+5)+")>0,\"\",IF(H"+(i+4)+"=H"+(i+5)+",A"+(i+4)+",ROW()-4))");
+						break;
+					}
+				} else if (SHEET_TYPE_BEST2S.equals(template.getSheetName()) || SHEET_TYPE_BEST2M.equals(template.getSheetName()) || SHEET_TYPE_BEST2N.equals(template.getSheetName())) {
 					String range = "E"+(i+5)+":"+"F"+(i+5);
 					switch (j) {
 					// rank
@@ -1029,7 +1054,21 @@ public class ScoresheetAction extends FrontendAction {
 						best.setCellFormula("IF(MIN("+range+")>0,MIN("+range+"),IF(COUNTBLANK("+range+")=2,\"\",\"DNF\"))");
 						break;
 					}
-				} else if (SHEET_TYPE_BEST3S.equals(template.getSheetName()) || SHEET_TYPE_BEST3M.equals(template.getSheetName())) {
+				} else if (SHEET_TYPE_TEAMBEST2M.equals(template.getSheetName())) {
+					String range = "H"+(i+5)+":"+"I"+(i+5);
+					switch (j) {
+					// rank
+					case 0:
+						Cell rank = getCell(resultSheet, i+4, j, Cell.CELL_TYPE_FORMULA);
+						rank.setCellFormula("IF(COUNTBLANK(B"+(i+5)+")>0,\"\",IF(J"+(i+4)+"=J"+(i+5)+",A"+(i+4)+",ROW()-4))");
+						break;
+					// best
+					case 9:
+						Cell best = getCell(resultSheet, i+4, j, Cell.CELL_TYPE_FORMULA);
+						best.setCellFormula("IF(MIN("+range+")>0,MIN("+range+"),IF(COUNTBLANK("+range+")=2,\"\",\"DNF\"))");
+						break;
+					}
+				} else if (SHEET_TYPE_BEST3S.equals(template.getSheetName()) || SHEET_TYPE_BEST3M.equals(template.getSheetName()) || SHEET_TYPE_BEST3N.equals(template.getSheetName())) {
 					String range = "E"+(i+5)+":"+"G"+(i+5);
 					switch (j) {
 					// rank
@@ -1041,6 +1080,20 @@ public class ScoresheetAction extends FrontendAction {
 					case 7:
 						Cell best = getCell(resultSheet, i+4, j, Cell.CELL_TYPE_FORMULA);
 						best.setCellFormula("IF(MIN("+range+")>0,MIN("+range+"),IF(COUNTBLANK("+range+")=3,\"\",\"DNF\"))");
+						break;
+					}
+				} else if (SHEET_TYPE_TEAMBEST3M.equals(template.getSheetName())) {
+					String range = "H"+(i+5)+":"+"J"+(i+5);
+					switch (j) {
+					// rank
+					case 0:
+						Cell rank = getCell(resultSheet, i+4, j, Cell.CELL_TYPE_FORMULA);
+						rank.setCellFormula("IF(COUNTBLANK(B"+(i+5)+")>0,\"\",IF(K"+(i+4)+"=K"+(i+5)+",A"+(i+4)+",ROW()-4))");
+						break;
+					// best
+					case 10:
+						Cell best = getCell(resultSheet, i+4, j, Cell.CELL_TYPE_FORMULA);
+						best.setCellFormula("IF(MIN("+range+")>0,MIN("+range+"),IF(COUNTBLANK("+range+")=2,\"\",\"DNF\"))");
 						break;
 					}
 				} else if (SHEET_TYPE_MULTIBF1.equals(template.getSheetName())) {

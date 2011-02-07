@@ -51,7 +51,7 @@ public class ResultTimeFormat {
 			} else if (Event.TimeFormat.SECONDS.getValue().equals(timeFormat)) {
 				return format(result / 100F);
 			} else if (Event.TimeFormat.MINUTES.getValue().equals(timeFormat)) {
-				Date date = formatDoubleToDate(result); // FIXME: refactor this to as working on dates does not work
+				Date date = formatDoubleToDate(result); // FIXME: refactor this too as working on dates does not work
 				return format(date);
 			} else if (Event.TimeFormat.MULTI_BLD.getValue().equals(timeFormat)) {
 				return formatMultiBLD(result);

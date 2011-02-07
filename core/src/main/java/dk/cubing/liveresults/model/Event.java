@@ -61,7 +61,8 @@ public class Event {
 		SECONDS ("s"),
 		MINUTES ("m"),
 		MULTI_BLD ("b"),
-		NUMBER ("n");
+		NUMBER ("n"),
+		TEAM ("t");
 		
 		private String value;
 		private TimeFormat(String value) {

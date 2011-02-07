@@ -61,5 +61,47 @@
         <s:elseif test="#rowstatus.index == 18">
             <td class="c"><s:if test="registeredEvents.signedUpForMbf">X</s:if><s:else>-</s:else></td>
         </s:elseif>
+        <s:elseif test="#rowstatus.index == 19">
+        	<td class="c"><s:if test="registeredEvents.signedUpFor333ni">X</s:if><s:else>-</s:else></td>
+        </s:elseif>
+        <s:elseif test="#rowstatus.index == 20">
+			<td class="c"><s:if test="registeredEvents.signedUpFor333sbf">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
+		<s:elseif test="#rowstatus.index == 21">
+			<td class="c"><s:if test="registeredEvents.signedUpFor333r3">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
+		<s:elseif test="#rowstatus.index == 22">
+			<td class="c"><s:if test="registeredEvents.signedUpFor333ts">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
+		<s:elseif test="#rowstatus.index == 23">
+			<td class="c"><s:if test="registeredEvents.signedUpFor333bts">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
+		<s:elseif test="#rowstatus.index == 24">
+			<td class="c"><s:if test="registeredEvents.signedUpFor222bf">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
+		<s:elseif test="#rowstatus.index == 25">
+			<td class="c"><s:if test="registeredEvents.signedUpFor333si">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
+		<s:elseif test="#rowstatus.index == 26">
+			<td class="c"><s:if test="registeredEvents.signedUpForRainb">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
+		<s:elseif test="#rowstatus.index == 27">
+			<td class="c"><s:if test="registeredEvents.signedUpForSnake">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
+		<s:elseif test="#rowstatus.index == 28">
+			<td class="c"><s:if test="registeredEvents.signedUpForSkewb">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
+		<s:elseif test="#rowstatus.index == 29">
+			<td class="c"><s:if test="registeredEvents.signedUpForMirbl">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
+		<s:elseif test="#rowstatus.index == 30">
+			<td class="c"><s:if test="registeredEvents.signedUpFor222oh">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
+		<s:elseif test="#rowstatus.index == 31">
+			<td class="c"><s:if test="registeredEvents.signedUpForMagico">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
+		<s:elseif test="#rowstatus.index == 32">
+			<td class="c"><s:if test="registeredEvents.signedUpFor360">X</s:if><s:else>-</s:else></td>
+		</s:elseif>
     </c:if>
 </s:iterator>

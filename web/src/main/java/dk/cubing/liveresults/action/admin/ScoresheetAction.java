@@ -867,7 +867,7 @@ public class ScoresheetAction extends FrontendAction {
 		if (SHEET_TYPE_REGISTRATION.equals(sheet.getSheetName())) {
 			for (int i=0; i<33; i++) {
 				Cell count = getCell(sheet, 1, 7+i, Cell.CELL_TYPE_FORMULA);
-				String col = CellReference.convertNumToColString(i);
+				String col = CellReference.convertNumToColString(7+i);
 				String ref = col + "4:" + col + line;
 				count.setCellFormula("SUM("+ref+")");
 			}

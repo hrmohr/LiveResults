@@ -54,15 +54,27 @@
 									<xsl:apply-templates select="eventName" />
 								</fo:block>
 								<fo:block margin-top="1cm">event is</fo:block>
-								<fo:block font-size="36pt">
-									<xsl:apply-templates select="competitorName" />
-								</fo:block>
-								<fo:block margin-top="1cm">with a final result of
-								</fo:block>
-								<fo:block font-size="36pt">
-									<xsl:apply-templates select="result" />
-								</fo:block>
-								<fo:block margin-top="3.5cm">
+								<xsl:variable name="teamEvent" select="teamEvent" />
+								<xsl:choose>
+									<xsl:when test="$teamEvent = 'TRUE'">
+										<fo:block font-size="30pt"><xsl:apply-templates select="competitor1Name" /></fo:block>
+										<fo:block font-size="30pt"><xsl:apply-templates select="competitor2Name" /></fo:block>
+										<fo:block margin-top="1cm">with a final result of</fo:block>
+										<fo:block font-size="36pt" margin-bottom="2.5cm">
+											<xsl:apply-templates select="result" />
+										</fo:block>
+									</xsl:when>
+									<xsl:otherwise>
+										<fo:block font-size="36pt">
+											<xsl:apply-templates select="competitorName" />
+										</fo:block>
+										<fo:block margin-top="1cm">with a final result of</fo:block>
+										<fo:block font-size="36pt" margin-bottom="3.5cm">
+											<xsl:apply-templates select="result" />
+										</fo:block>
+									</xsl:otherwise>
+								</xsl:choose>
+								<fo:block>
 									<fo:table>
 										<fo:table-column column-width="50%" />
 										<fo:table-column column-width="50%" />

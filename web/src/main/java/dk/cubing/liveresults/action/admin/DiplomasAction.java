@@ -312,9 +312,27 @@ public class DiplomasAction extends FrontendAction {
 			eventName.appendChild(doc.createTextNode(formatEventName(event.getName())));
 			diploma.appendChild(eventName);
 			
-			Element competitorName = doc.createElement("competitorName");
-			competitorName.appendChild(doc.createTextNode(result.getFirstname() + " " + result.getSurname()));
-			diploma.appendChild(competitorName);
+			boolean isTeamEvent = event.getName().toLowerCase().contains("team");
+			Element eventTeam = doc.createElement("teamEvent");
+			eventTeam.appendChild(doc.createTextNode(isTeamEvent ? "TRUE" : "FALSE"));
+			diploma.appendChild(eventTeam);
+			
+			if (isTeamEvent) {
+				String firstnames[] = result.getFirstname().split(" / ");
+				String surnames[] = result.getSurname().split(" / ");
+				String fullName1 = firstnames[0] + " " + surnames[0];
+				String fullName2 = firstnames[1] + " " + surnames[1];
+				Element competitor1Name = doc.createElement("competitor1Name");
+				Element competitor2Name = doc.createElement("competitor2Name");
+				competitor1Name.appendChild(doc.createTextNode(fullName1));
+				competitor2Name.appendChild(doc.createTextNode(fullName2));
+				diploma.appendChild(competitor1Name);
+				diploma.appendChild(competitor2Name);
+			} else {
+				Element competitorName = doc.createElement("competitorName");
+				competitorName.appendChild(doc.createTextNode(result.getFirstname() + " " + result.getSurname()));
+				diploma.appendChild(competitorName);
+			}
 			
 			Element rankNode = doc.createElement("rank");
 			rankNode.appendChild(doc.createTextNode(isDanishTemplate ? resultTimeFormat.formatDanishRank(rank, isDanishOpen) : resultTimeFormat.formatRank(rank)));

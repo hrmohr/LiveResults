@@ -42,6 +42,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -864,9 +865,10 @@ public class ScoresheetAction extends FrontendAction {
 		
 		// adjust competitors count per event
 		if (SHEET_TYPE_REGISTRATION.equals(sheet.getSheetName())) {
-			for (int i=0; i<33; i++) { //FIXME: support unofficial events
+			for (int i=0; i<33; i++) {
 				Cell count = getCell(sheet, 1, 7+i, Cell.CELL_TYPE_FORMULA);
-				String ref = (char)('H' + i) + "4:" + (char)('H' + i) + line;
+				String col = CellReference.convertNumToColString(i);
+				String ref = col + "4:" + col + line;
 				count.setCellFormula("SUM("+ref+")");
 			}
 		}

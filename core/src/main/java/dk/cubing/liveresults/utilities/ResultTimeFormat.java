@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import dk.cubing.liveresults.model.Event;
 import dk.cubing.liveresults.model.Result;
@@ -33,6 +34,7 @@ public class ResultTimeFormat {
 	private final Calendar cal;
 
 	public ResultTimeFormat() {
+		Locale.setDefault(Locale.ENGLISH);
 		secondsFormat = new DecimalFormat("#0.00");
 		minutesFormat = new SimpleDateFormat("mm:ss.S");
 		numberFormat = new DecimalFormat("0");

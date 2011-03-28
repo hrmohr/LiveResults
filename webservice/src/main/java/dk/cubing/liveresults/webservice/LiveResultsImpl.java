@@ -29,7 +29,7 @@ public class LiveResultsImpl extends GenericWebService implements LiveResults {
 	
 	private String clientVersion;
 	private CompetitionService service;
-	private Producer producer;
+	private Producer producer = null;
 
 	/**
 	 * @param clientVersion the clientVersion to set
@@ -113,7 +113,9 @@ public class LiveResultsImpl extends GenericWebService implements LiveResults {
 			// only existing competitions can be saved
 			if (loadCompetition(competitionId, password) != null) {
 				getService().update(competition);
-				getProducer().send(competitionId);
+                if (getProducer() != null) {
+				    getProducer().send(competitionId);
+                }
 			}
 		} catch (CompetitionNotFoundException e) {
 			throw new CompetitionNotFoundException(e);

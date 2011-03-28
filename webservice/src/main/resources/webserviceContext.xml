@@ -39,6 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <property name="dao" ref="competitionDAO" />
     </bean>
 
+    <!--
     <amq:broker useJmx="false" persistent="false">
         <amq:transportConnectors>
             <amq:transportConnector uri="tcp://localhost:61616" />
@@ -53,11 +54,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <value>ResultsBot</value>
         </constructor-arg>
     </bean>
+    -->
 
     <bean id="liveResultsWebService" class="dk.cubing.liveresults.webservice.LiveResultsImpl">
         <property name="clientVersion" value="${project.version}" />  
         <property name="service" ref="competitionService" />
-        <property name="producer" ref="jmsProducer" />
+        <!-- property name="producer" ref="jmsProducer" /-->
     </bean>
 
     <jaxws:endpoint 

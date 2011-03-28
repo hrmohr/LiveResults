@@ -143,6 +143,7 @@
             <artifactId>activemq-core</artifactId>
             <version>${activemq.version}</version>
             <optional>false</optional>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.xbean</groupId>

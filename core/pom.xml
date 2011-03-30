@@ -36,6 +36,7 @@
 		<hibernate.version>3.4.0.GA</hibernate.version>
 		<activemq.version>5.3.0</activemq.version>
 		<xbean.version>3.6</xbean.version>
+        <opencsv.version>2.0</opencsv.version>
 	</properties>
 
 	<dependencies>
@@ -150,6 +151,12 @@
             <artifactId>xbean-spring</artifactId>
             <version>${xbean.version}</version>
         </dependency>
+
+        <dependency>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>${opencsv.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -494,6 +494,7 @@ public class ScoresheetAction extends FrontendAction {
                     StringWriter sw = new StringWriter();
                     csvConverter.compTool2Wca(new InputStreamReader(new FileInputStream(csv), "ISO-8859-1"), sw);
                     reader = new CSVReader(new StringReader(sw.toString()), ',');
+                    setCsvConvert(false);
                 } else {
                     reader = new CSVReader(new InputStreamReader(new FileInputStream(csv), "ISO-8859-1"), ',');
                 }

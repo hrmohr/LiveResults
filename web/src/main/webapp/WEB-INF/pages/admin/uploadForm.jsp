@@ -41,6 +41,9 @@
 	            <tr>
 	                <td><div class="space"><s:file name="csv" label="%{getText('admin.upload.csvfile')}" required="true" /></div></td>
 	            </tr>
+                <tr>
+	                <td><div class="space"><s:checkbox name="csvConvert" label="%{getText('admin.upload.csvConvert')}" /></div></td>
+	            </tr>
 	            <tr>
 	                <td align="right"><table><tr><td><div class="space"><div class="buttborder"><s:submit value="%{getText('admin.upload.submit')}" cssClass="butt" /></div></div></td></tr></table></td>
 	            </tr>

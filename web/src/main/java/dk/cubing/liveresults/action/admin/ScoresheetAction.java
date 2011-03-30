@@ -16,13 +16,7 @@
  */
 package dk.cubing.liveresults.action.admin;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,6 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import dk.cubing.liveresults.utilities.CsvConverter;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -71,6 +66,7 @@ public class ScoresheetAction extends FrontendAction {
 	private CompetitionService competitionService;
 	private final CountryUtil countryUtil;
 	private final SimpleDateFormat birthdayFormat;
+    private final CsvConverter csvConverter;
 	
 	private final String SHEET_TYPE_REGISTRATION = "Registration";
 	private final String SHEET_TYPE_AVERAGE5S = "average5s";
@@ -95,6 +91,7 @@ public class ScoresheetAction extends FrontendAction {
 	private File csv;
 	private String csvContentType;
 	private String csvFileName;
+    private boolean csvConvert;
 
 	private List<Competition> competitions;
 	private String competitionId;
@@ -121,6 +118,7 @@ public class ScoresheetAction extends FrontendAction {
 		countryUtil = new CountryUtil();
 		birthdayFormat = new SimpleDateFormat("yyyy-MM-dd");
 		birthdayFormat.setLenient(false);
+        csvConverter = new CsvConverter();
 	}
 	
 	/**
@@ -268,8 +266,22 @@ public class ScoresheetAction extends FrontendAction {
 	public void setCsvFileName(String csvFileName) {
 		this.csvFileName = csvFileName;
 	}
-	
-	/**
+
+    /**
+     * @return
+     */
+    public boolean isCsvConvert() {
+        return csvConvert;
+    }
+
+    /**
+     * @param csvConvert
+     */
+    public void setCsvConvert(boolean csvConvert) {
+        this.csvConvert = csvConvert;
+    }
+
+    /**
 	 * @param competitions the competitions to set
 	 */
 	public void setCompetitions(List<Competition> competitions) {
@@ -472,11 +484,20 @@ public class ScoresheetAction extends FrontendAction {
 			Competition competition = new Competition();
 			competition.setCompetitionId(competitionTemplate.getCompetitionId());
 			competition.setName(competitionTemplate.getName());
-			
-			// parse csv file
-			try {
-				CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(csv), "ISO-8859-1"), ',');
-				List<String[]> csvLines = reader.readAll();
+
+            // parse csv file
+            try {
+
+                // convert the CSV file
+                CSVReader reader;
+                if (isCsvConvert()) {
+                    StringWriter sw = new StringWriter();
+                    csvConverter.compTool2Wca(new InputStreamReader(new FileInputStream(csv), "ISO-8859-1"), sw);
+                    reader = new CSVReader(new StringReader(sw.toString()), ',');
+                } else {
+                    reader = new CSVReader(new InputStreamReader(new FileInputStream(csv), "ISO-8859-1"), ',');
+                }
+                List<String[]> csvLines = reader.readAll();
 				// first row which includes event names
 				List<Event> events = parseEvents(csvLines.remove(0));
 				

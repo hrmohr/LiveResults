@@ -236,7 +236,7 @@
 								<generatorConfiguration>
 									<generator>jsw</generator>
 									<includes>
-                                        <include>freebsd-x86-32</include>
+                                        <include>linux-x86-32</include>
 										<include>macosx-universal-64</include>
 										<include>windows-x86-32</include>
 									</includes>

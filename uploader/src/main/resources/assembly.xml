@@ -41,10 +41,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <directory>target/appassembler/jsw/uploader/logs</directory>
       <outputDirectory>logs</outputDirectory>
     </fileSet>
-    <fileSet>
-      <directory>target/appassembler/jsw/uploader/db</directory>
-      <outputDirectory>db</outputDirectory>
-    </fileSet>
   </fileSets>
   <files>
     <file>

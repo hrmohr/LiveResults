@@ -235,7 +235,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
-				<version>1.2-SNAPSHOT</version>
+				<version>1.3-SNAPSHOT</version>
 				<configuration>
 					<target>${project.build.directory}/appassembler</target>
 					<repoPath>jsw/${project.artifactId}/lib</repoPath>
@@ -252,7 +252,7 @@
 								<generatorConfiguration>
 									<generator>jsw</generator>
 									<includes>
-										<include>macosx-universal-64</include>
+										<include>macosx-x86-universal-64</include>
 										<include>windows-x86-32</include>
 									</includes>
 									<configuration>

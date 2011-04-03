@@ -219,7 +219,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
-				<version>1.1-SNAPSHOT</version>
+				<version>1.2-SNAPSHOT</version>
 				<configuration>
 					<target>${project.build.directory}/appassembler</target>
 					<repoPath>jsw/${project.artifactId}/lib</repoPath>

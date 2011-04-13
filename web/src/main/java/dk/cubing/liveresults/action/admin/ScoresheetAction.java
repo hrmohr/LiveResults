@@ -91,7 +91,9 @@ public class ScoresheetAction extends FrontendAction {
 	private File csv;
 	private String csvContentType;
 	private String csvFileName;
-    private boolean csvConvert;
+    private boolean csvConvert = false;
+    private List<String> csvFileEncodings = new ArrayList<String>();
+    private String csvFileEncoding = "ISO-8859-1";
 
 	private List<Competition> competitions;
 	private String competitionId;
@@ -150,6 +152,10 @@ public class ScoresheetAction extends FrontendAction {
 	}
 	
 	public void initMap() {
+        // supported file encodings
+        csvFileEncodings.add("ISO-8859-1");
+        csvFileEncodings.add("UTF-8");
+
 		// average of 5 with a seconds format
 		eventNamesMap.put("333", setupEvent("3x3", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
 		eventNamesMap.put("222", setupEvent("2x2", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
@@ -224,8 +230,29 @@ public class ScoresheetAction extends FrontendAction {
 		timeFormatTypesMap.put("b", "Multi BLD");
 		timeFormatTypesMap.put("t", "Team");
 	}
-	
-	/**
+
+    /**
+     * @return
+     */
+    public String getCsvFileEncoding() {
+        return csvFileEncoding;
+    }
+
+    /**
+     * @param csvFileEncoding
+     */
+    public void setCsvFileEncoding(String csvFileEncoding) {
+        this.csvFileEncoding = csvFileEncoding;
+    }
+
+    /**
+     * @return
+     */
+    public List<String> getCsvFileEncodings() {
+        return csvFileEncodings;
+    }
+
+    /**
 	 * @return the csv
 	 */
 	public File getCsv() {
@@ -492,11 +519,11 @@ public class ScoresheetAction extends FrontendAction {
                 CSVReader reader;
                 if (isCsvConvert()) {
                     StringWriter sw = new StringWriter();
-                    csvConverter.compTool2Wca(new InputStreamReader(new FileInputStream(csv), "ISO-8859-1"), sw);
+                    csvConverter.compTool2Wca(new InputStreamReader(new FileInputStream(csv), getCsvFileEncoding()), sw);
                     reader = new CSVReader(new StringReader(sw.toString()), ',');
                     setCsvConvert(false);
                 } else {
-                    reader = new CSVReader(new InputStreamReader(new FileInputStream(csv), "ISO-8859-1"), ',');
+                    reader = new CSVReader(new InputStreamReader(new FileInputStream(csv), getCsvFileEncoding()), ',');
                 }
                 List<String[]> csvLines = reader.readAll();
 				// first row which includes event names
@@ -531,6 +558,9 @@ public class ScoresheetAction extends FrontendAction {
 				});
 				competition.setCompetitors(competitors);
 				setCompetition(competition);
+
+                setCsvFileEncoding("ISO-8859-1");
+
 				return Action.SUCCESS;
 			} catch (Exception e) {
 				log.error(e.getLocalizedMessage(), e);

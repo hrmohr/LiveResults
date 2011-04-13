@@ -24,7 +24,7 @@ public abstract class FrontendAction extends ActionSupport implements StrutsStat
 
 	private static final long serialVersionUID = 1L;
 	
-	protected int size = 10;
+	protected int size = 25;
 	protected int page = 1;
 	
 	/**

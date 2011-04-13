@@ -62,10 +62,12 @@ public class CsvConverterTest {
     @Test
     public void testCompTool2WcaAllEvents() throws Exception {
         String s = "Name,country,WCA ID,birthday,sex,,2,3,3b,4,4b,5,5b,6,7,cl,fm,ft,m,mbf,mm,mx,oh,py,s1\n" +
-                "Mads Mohr Christensen,Denmark,2007CHRI02,1978-03-13,m,,1,1,1,1,0,1,0,0,0,1,1,0,0,0,0,1,1,1,0\n";
+                "Mads Mohr Christensen,Denmark,2007CHRI02,1978-03-13,m,,1,1,1,1,0,1,0,0,0,1,1,0,0,0,0,1,1,1,0\n" +
+                "Anders J¿rgensen,Denmark,2009JORG01,1961-09-09,m,,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0\n";
         
-        String expected = "Status,Name,Country,WCA ID,Birth Date,Gender,,333,444,777,222,333oh,333fm,333ft,minx,pyram,sq1,clock,666,magic,mmagic,333mbf,Email,Guests,IP\n" +
-                "a,Mads Mohr Christensen,Denmark,2007CHRI02,1978-3-13,m,,1,1,0,1,1,1,0,1,1,0,1,0,0,0,0,,,127.0.0.1\n";
+        String expected = "Status,Name,Country,WCA ID,Birth Date,Gender,,333,444,777,222,333bf,333oh,333fm,333ft,minx,pyram,sq1,clock,666,magic,mmagic,444bf,555bf,333mbf,Email,Guests,IP\n" +
+                "a,Mads Mohr Christensen,Denmark,2007CHRI02,1978-3-13,m,,1,1,0,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,,,127.0.0.1\n" +
+                "a,Anders J¿rgensen,Denmark,2009JORG01,1961-9-09,m,,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,,,127.0.0.1\n";
 
         StringWriter sw = new StringWriter();
         conv.compTool2Wca(new StringReader(s), sw);

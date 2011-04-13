@@ -95,7 +95,7 @@ public class CsvConverter {
         compToolMap.put("4","event444");
         compToolMap.put("5","event555");
         compToolMap.put("2","event222");
-        compToolMap.put("bf","event333bf");
+        compToolMap.put("3b","event333bf");
         compToolMap.put("oh","event333oh");
         compToolMap.put("fm","event333fm");
         compToolMap.put("ft","event333ft");
@@ -107,8 +107,8 @@ public class CsvConverter {
         compToolMap.put("7","event555");
         compToolMap.put("m","eventmagic");
         compToolMap.put("mm","eventmmagic");
-        compToolMap.put("4bf","event444bf");
-        compToolMap.put("5bf","event555bf");
+        compToolMap.put("4b","event444bf");
+        compToolMap.put("5b","event555bf");
         compToolMap.put("mbf","event333mbf");
 
         compToolMap.put("ni","event333ni");

@@ -36,7 +36,7 @@ public class CsvConverterTest {
     @Test
     public void testCompTool2Wca() throws Exception {
         String s = "Name,country,WCA ID,birthday,sex,,2,3,bts,ni,oh,py\n" +
-                "Mads Mohr Christensen,Denmark,2007CHRI02,1978-03-13,m,,1,1,1,1,1,1";
+                "Mads Mohr Christensen,Denmark,2007CHRI02,1978-03-13,m,,1,1,1,1,1,1\n";
 
         String expected = "Status,Name,Country,WCA ID,Birth Date,Gender,,333,222,333oh,pyram,333ni,333bts,Email,Guests,IP\n" +
                 "a,Mads Mohr Christensen,Denmark,2007CHRI02,1978-3-13,m,,1,1,1,1,1,1,,,127.0.0.1\n";
@@ -57,5 +57,18 @@ public class CsvConverterTest {
         StringWriter sw = new StringWriter();
         conv.wca2CompTool(new StringReader(s), sw);
         assertEquals(expected, sw.toString());
+    }
+
+    @Test
+    public void testCompTool2WcaAllEvents() throws Exception {
+        String s = "Name,country,WCA ID,birthday,sex,,2,3,3b,4,4b,5,5b,6,7,cl,fm,ft,m,mbf,mm,mx,oh,py,s1\n" +
+                "Mads Mohr Christensen,Denmark,2007CHRI02,1978-03-13,m,,1,1,1,1,0,1,0,0,0,1,1,0,0,0,0,1,1,1,0\n";
+        
+        String expected = "Status,Name,Country,WCA ID,Birth Date,Gender,,333,444,777,222,333oh,333fm,333ft,minx,pyram,sq1,clock,666,magic,mmagic,333mbf,Email,Guests,IP\n" +
+                "a,Mads Mohr Christensen,Denmark,2007CHRI02,1978-3-13,m,,1,1,0,1,1,1,0,1,1,0,1,0,0,0,0,,,127.0.0.1\n";
+
+        StringWriter sw = new StringWriter();
+        conv.compTool2Wca(new StringReader(s), sw);
+        assertEquals(expected, sw.toString());        
     }
 }

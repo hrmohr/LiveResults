@@ -65,9 +65,9 @@ public class CsvConverterTest {
                 "Mads Mohr Christensen,Denmark,2007CHRI02,1978-03-13,m,,1,1,1,1,0,1,0,0,0,1,1,0,0,0,0,1,1,1,0\n" +
                 "Anders Jørgensen,Denmark,2009JORG01,1961-09-09,m,,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0\n";
         
-        String expected = "Status,Name,Country,WCA ID,Birth Date,Gender,,333,444,777,222,333bf,333oh,333fm,333ft,minx,pyram,sq1,clock,666,magic,mmagic,444bf,555bf,333mbf,Email,Guests,IP\n" +
-                "a,Mads Mohr Christensen,Denmark,2007CHRI02,1978-3-13,m,,1,1,0,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,,,127.0.0.1\n" +
-                "a,Anders Jørgensen,Denmark,2009JORG01,1961-9-09,m,,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,,,127.0.0.1\n";
+        String expected = "Status,Name,Country,WCA ID,Birth Date,Gender,,333,444,555,222,333bf,333oh,333fm,333ft,minx,pyram,sq1,clock,666,777,magic,mmagic,444bf,555bf,333mbf,Email,Guests,IP\n" +
+                "a,Mads Mohr Christensen,Denmark,2007CHRI02,1978-3-13,m,,1,1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,0,,,127.0.0.1\n" +
+                "a,Anders Jørgensen,Denmark,2009JORG01,1961-9-09,m,,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,,,127.0.0.1\n";
 
         StringWriter sw = new StringWriter();
         conv.compTool2Wca(new StringReader(s), sw);

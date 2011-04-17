@@ -34,7 +34,7 @@ public class Country implements Serializable {
     private int zoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "continentId")
+    @JoinColumn(name = "continentId", insertable=false, updatable=false)
     private Continent continent;
 
     public String getId() {

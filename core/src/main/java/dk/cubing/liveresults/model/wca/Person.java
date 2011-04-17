@@ -35,7 +35,7 @@ public class Person implements Serializable {
     private String gender;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "countryId")
+    @JoinColumn(name = "countryId", insertable=false, updatable=false)
     private Country country;
 
     public String getId() {

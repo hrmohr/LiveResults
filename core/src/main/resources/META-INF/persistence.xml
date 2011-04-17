@@ -20,16 +20,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
 
     <persistence-unit name="punit" transaction-type="RESOURCE_LOCAL">
-        <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <class>dk.cubing.liveresults.model.Competition</class>
         <class>dk.cubing.liveresults.model.Competitor</class>
         <class>dk.cubing.liveresults.model.Event</class>
         <class>dk.cubing.liveresults.model.RegisteredEvents</class>
         <class>dk.cubing.liveresults.model.Result</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
     </persistence-unit>
 
-    <persistence-unit name="punitwca" transaction-type="RESOURCE_LOCAL">
-        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <persistence-unit name="punitWca" transaction-type="RESOURCE_LOCAL">
         <class>dk.cubing.liveresults.model.wca.Competition</class>
         <class>dk.cubing.liveresults.model.wca.Continent</class>
         <class>dk.cubing.liveresults.model.wca.Country</class>
@@ -38,5 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <class>dk.cubing.liveresults.model.wca.Person</class>
         <class>dk.cubing.liveresults.model.wca.Result</class>
         <class>dk.cubing.liveresults.model.wca.Round</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
     </persistence-unit>
 </persistence>

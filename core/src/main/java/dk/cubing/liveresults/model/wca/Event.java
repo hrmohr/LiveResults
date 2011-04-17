@@ -32,7 +32,7 @@ public class Event implements Serializable {
     private String cellName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "formatId")
+    @JoinColumn(name = "formatId", insertable=false, updatable=false)
     private Format format;
 
     public String getId() {

@@ -48,7 +48,7 @@ public class Competition implements Serializable {
     private int longitude;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "countryId")
+    @JoinColumn(name = "countryId", insertable=false, updatable=false)
     private Country country;
 
     @OneToMany(mappedBy = "competitionId", fetch = FetchType.LAZY)

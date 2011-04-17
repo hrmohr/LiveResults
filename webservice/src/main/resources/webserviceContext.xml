@@ -33,10 +33,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 	<import resource="classpath:database.xml" />
 	
-    <bean id="competitionDAO" class="dk.cubing.liveresults.dao.CompetitionDAO" />
-    
+    <bean id="competitionDAO" class="dk.cubing.liveresults.dao.CompetitionDAO">
+        <property name="entityManager" ref="entityManager" />
+    </bean>
+
     <bean id="competitionService" class="dk.cubing.liveresults.service.CompetitionService">
         <property name="dao" ref="competitionDAO" />
+    </bean>
+
+    <bean id="competitionDaoWca" class="dk.cubing.liveresults.dao.wca.CompetitionDAO">
+        <property name="entityManager" ref="entityManagerWca" />
+    </bean>
+
+    <bean id="competitionServiceWca" class="dk.cubing.liveresults.service.wca.CompetitionService">
+        <property name="dao" ref="competitionDaoWca" />
     </bean>
 
     <!--
@@ -62,11 +72,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <!-- property name="producer" ref="jmsProducer" /-->
     </bean>
 
+    <bean id="wcaResultsWebService" class="dk.cubing.liveresults.webservice.WcaResultsImpl">
+        <property name="service" ref="competitionServiceWca" />
+    </bean>
+
     <jaxws:endpoint 
       id="liveResults" 
       implementorClass="dk.cubing.liveresults.webservice.LiveResultsImpl"
       implementor="#liveResultsWebService" 
       address="/LiveResults"
+    />
+
+    <jaxws:endpoint
+      id="wcaResults"
+      implementorClass="dk.cubing.liveresults.webservice.WcaResultsImpl"
+      implementor="#wcaResultsWebService"
+      address="/WcaResults"
     />
 
     <aop:config proxy-target-class="true" />

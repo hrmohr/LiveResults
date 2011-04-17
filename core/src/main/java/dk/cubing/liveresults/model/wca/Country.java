@@ -17,11 +17,79 @@
 
 package dk.cubing.liveresults.model.wca;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "Countries")
 public class Country implements Serializable {
+
+    @Id
+    private String id;
+    private String name;
+    private String continentId;
+    private int latitude;
+    private int longitude;
+    private int zoom;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "continentId")
+    private Continent continent;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getContinentId() {
+        return continentId;
+    }
+
+    public void setContinentId(String continentId) {
+        this.continentId = continentId;
+    }
+
+    public int getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(int latitude) {
+        this.latitude = latitude;
+    }
+
+    public int getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(int longitude) {
+        this.longitude = longitude;
+    }
+
+    public int getZoom() {
+        return zoom;
+    }
+
+    public void setZoom(int zoom) {
+        this.zoom = zoom;
+    }
+
+    public Continent getContinent() {
+        return continent;
+    }
+
+    public void setContinent(Continent continent) {
+        this.continent = continent;
+    }
 }

@@ -1,11 +1,52 @@
+/*
+ * Copyright (C) 2011 Mads Mohr Christensen, <hr.mohr@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dk.cubing.liveresults.model.wca;
 
-/**
- * Created by IntelliJ IDEA.
- * User: mohr
- * Date: Apr 17, 2011
- * Time: 2:47:23 PM
- * To change this template use File | Settings | File Templates.
- */
-public class PersonPK {
+import javax.persistence.Id;
+import java.io.Serializable;
+
+public class PersonPK implements Serializable {
+
+    private String id;
+    private String countryId;
+
+    public PersonPK(String id, String countryId) {
+        this.id = id;
+        this.countryId = countryId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PersonPK personPK = (PersonPK) o;
+
+        if (countryId != null ? !countryId.equals(personPK.countryId) : personPK.countryId != null) return false;
+        if (id != null ? !id.equals(personPK.id) : personPK.id != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (countryId != null ? countryId.hashCode() : 0);
+        return result;
+    }
 }

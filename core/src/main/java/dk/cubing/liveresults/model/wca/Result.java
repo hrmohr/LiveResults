@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "Results")
-@IdClass(ResultsPK.class)
+@IdClass(ResultPK.class)
 public class Result implements Serializable {
 
     @Id
@@ -32,11 +32,10 @@ public class Result implements Serializable {
     @Id
     private String roundId;
     private String formatId;
-
-    private String personName;
     @Id
     private String personId;
-    private String personCountryId;
+    private String personName;
+    private String countryId;
 
     private int pos;
     private int best;
@@ -50,139 +49,30 @@ public class Result implements Serializable {
     private String regionalSingleRecord;
     private String regionalAverageRecord;
 
-    public String getCompetitionId() {
-        return competitionId;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "competitionId")
+    private Competition competition;
 
-    public void setCompetitionId(String competitionId) {
-        this.competitionId = competitionId;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "eventId")
+    private Event event;
 
-    public String getEventId() {
-        return eventId;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "roundId")
+    private Round round;
 
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "formatId")
+    private Format format;
 
-    public String getRoundId() {
-        return roundId;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "countryId")
+    private Country country;
 
-    public void setRoundId(String roundId) {
-        this.roundId = roundId;
-    }
-
-    public String getFormatId() {
-        return formatId;
-    }
-
-    public void setFormatId(String formatId) {
-        this.formatId = formatId;
-    }
-
-    public String getPersonName() {
-        return personName;
-    }
-
-    public void setPersonName(String personName) {
-        this.personName = personName;
-    }
-
-    public String getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(String personId) {
-        this.personId = personId;
-    }
-
-    public String getPersonCountryId() {
-        return personCountryId;
-    }
-
-    public void setPersonCountryId(String personCountryId) {
-        this.personCountryId = personCountryId;
-    }
-
-    public int getPos() {
-        return pos;
-    }
-
-    public void setPos(int pos) {
-        this.pos = pos;
-    }
-
-    public int getBest() {
-        return best;
-    }
-
-    public void setBest(int best) {
-        this.best = best;
-    }
-
-    public int getAverage() {
-        return average;
-    }
-
-    public void setAverage(int average) {
-        this.average = average;
-    }
-
-    public int getValue1() {
-        return value1;
-    }
-
-    public void setValue1(int value1) {
-        this.value1 = value1;
-    }
-
-    public int getValue2() {
-        return value2;
-    }
-
-    public void setValue2(int value2) {
-        this.value2 = value2;
-    }
-
-    public int getValue3() {
-        return value3;
-    }
-
-    public void setValue3(int value3) {
-        this.value3 = value3;
-    }
-
-    public int getValue4() {
-        return value4;
-    }
-
-    public void setValue4(int value4) {
-        this.value4 = value4;
-    }
-
-    public int getValue5() {
-        return value5;
-    }
-
-    public void setValue5(int value5) {
-        this.value5 = value5;
-    }
-
-    public String getRegionalSingleRecord() {
-        return regionalSingleRecord;
-    }
-
-    public void setRegionalSingleRecord(String regionalSingleRecord) {
-        this.regionalSingleRecord = regionalSingleRecord;
-    }
-
-    public String getRegionalAverageRecord() {
-        return regionalAverageRecord;
-    }
-
-    public void setRegionalAverageRecord(String regionalAverageRecord) {
-        this.regionalAverageRecord = regionalAverageRecord;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(name = "personId"),
+            @JoinColumn(name = "countryId")
+    })
+    private Person person;
 }

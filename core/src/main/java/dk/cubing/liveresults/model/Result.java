@@ -24,6 +24,7 @@ import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.io.Serializable;
 
 @Entity
 @NamedNativeQueries(value = {
@@ -74,7 +75,7 @@ import javax.persistence.Transient;
 	)
 })
 @Table(name = "wca_results")
-public class Result {
+public class Result implements Serializable {
 	
 	public static enum Penalty {
 		DNF (-1),

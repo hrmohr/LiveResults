@@ -16,6 +16,7 @@
  */
 package dk.cubing.liveresults.model;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
@@ -37,7 +38,7 @@ import dk.cubing.liveresults.utilities.StringUtil;
 
 @Entity
 @Table(name = "wca_competitions")
-public class Competition {
+public class Competition implements Serializable {
 
 	@Id
 	private String competitionId;

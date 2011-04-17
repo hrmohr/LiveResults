@@ -16,6 +16,7 @@
  */
 package dk.cubing.liveresults.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "wca_registered_events")
-public class RegisteredEvents {
+public class RegisteredEvents implements Serializable {
 
 	@Id
 	@GeneratedValue

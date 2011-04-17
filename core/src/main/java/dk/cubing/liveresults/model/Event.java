@@ -16,6 +16,7 @@
  */
 package dk.cubing.liveresults.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -39,7 +40,7 @@ import javax.persistence.Table;
 		)
 })
 @Table(name = "wca_events")
-public class Event {
+public class Event implements Serializable {
 	
 	public static enum Format {
 		AVERAGE ("a"),

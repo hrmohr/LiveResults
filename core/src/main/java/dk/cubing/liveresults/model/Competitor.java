@@ -16,6 +16,7 @@
  */
 package dk.cubing.liveresults.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -40,7 +41,7 @@ import javax.persistence.Transient;
 	)
 })
 @Table(name = "wca_competitors")
-public class Competitor {
+public class Competitor implements Serializable {
 
 	@Id
 	@GeneratedValue

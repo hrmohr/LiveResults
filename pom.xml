@@ -18,7 +18,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>dk.cubing.liveresults</groupId>
 	<artifactId>liveresults</artifactId>
-	<version>3.6</version>
+	<version>3.7</version>
 	<name>Competition Live Results</name>
 	<url>http://live.cubing.dk/</url>
 	<packaging>pom</packaging>
@@ -44,9 +44,9 @@
 	</issueManagement>
 
 	<scm>
-		<connection>scm:svn:svn://svn.cubing.dk/liveresults/trunk</connection>
-		<developerConnection>scm:svn:svn+ssh://svn.cubing.dk/home/svn/repositories/liveresults/trunk</developerConnection>
-		<url>http://svn.cubing.dk/viewvc/viewvc.cgi/liveresults/trunk/</url>
+		<connection>scm:git:git://github.com/hrmohr/LiveResults.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:hrmohr/LiveResults.git</developerConnection>
+		<url>https://github.com/hrmohr/LiveResults</url>
 	</scm>
 
 	<modules>
@@ -58,11 +58,55 @@
 	</modules>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.1.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.0.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>hibernate3-maven-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>appassembler-maven-plugin</artifactId>
+                    <version>1.3-SNAPSHOT</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.2-beta-4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>tomcat-maven-plugin</artifactId>
+                    <version>1.0-beta-1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>7.0.1.v20091125</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -75,5 +119,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

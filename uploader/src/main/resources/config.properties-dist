@@ -17,4 +17,5 @@ competition.id=
 password=
 results.filename=
 webservice.endpoint=http://api.cubing.dk/LiveResults
+webservice.wca.endpoint=http://api.cubing.dk/WcaResults
 show.gui=true

@@ -133,6 +133,20 @@ public class Configuration {
 		config.setProperty("webservice.endpoint", endpoint);
 	}
 
+    /**
+	 * @return
+	 */
+	public String getWcaWebserviceEndpoint() {
+		return getConfigurationValue("webservice.wca.endpoint");
+	}
+
+	/**
+	 * @param endpoint
+	 */
+	public void setWcaWebserviceEndpoint(String endpoint) {
+		config.setProperty("webservice.wca.endpoint", endpoint);
+	}
+
 	/**
 	 * @return
 	 */

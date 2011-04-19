@@ -19,11 +19,19 @@ package dk.cubing.liveresults.uploader.engine;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import dk.cubing.liveresults.model.Event;
+import dk.cubing.liveresults.model.Result;
+import dk.cubing.liveresults.webservice.wca.InvalidCountryException;
+import dk.cubing.liveresults.webservice.wca.InvalidEventException;
+import dk.cubing.liveresults.webservice.wca.WcaResults;
 import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.springframework.security.BadCredentialsException;
@@ -53,8 +61,10 @@ public class ResultsEngine implements Runnable {
 	private final FilesystemAlterationMonitor fam;
 	private ResultsFileChangeListener pListener = null;
 	private final ResultsFileParser parser;
-	private final JaxWsProxyFactoryBean factory;
+    private String endpoint;
+    private String endpointWca;
 	private LiveResults client;
+    private WcaResults clientWca;
 	private String clientVersion;
 	private boolean isRunning = false;
 	private boolean isShuttingDown = false;
@@ -64,8 +74,9 @@ public class ResultsEngine implements Runnable {
 	public ResultsEngine() {
 		config = new Configuration(this);
 		fam = new FilesystemAlterationMonitor();
-		factory = new JaxWsProxyFactoryBean();
 		parser = new ResultsFileParser();
+        endpoint = getConfig().getWebserviceEndpoint();
+        endpointWca = getConfig().getWcaWebserviceEndpoint();
 	}
 	
 	/**
@@ -101,16 +112,37 @@ public class ResultsEngine implements Runnable {
 	 */
 	public LiveResults getClient() {
 		// lazy init and endpoint reloading
-		if (client == null || !getConfig().getWebserviceEndpoint().equals(factory.getAddress())) {
+		if (client == null || !getConfig().getWebserviceEndpoint().equals(endpoint)) {
 			try {
+                endpoint = getConfig().getWebserviceEndpoint();
+                JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
 				factory.setServiceClass(LiveResults.class);
-				factory.setAddress(getConfig().getWebserviceEndpoint());
+				factory.setAddress(endpoint);
 				client = (LiveResults) factory.create();
 			} catch (Exception e) {
 				log.error("Could not create webservice client", e);
 			}
 		}
 		return client;
+	}
+
+    /**
+	 * @return the client
+	 */
+	public WcaResults getWcaClient() {
+		// lazy init and endpoint reloading
+		if (clientWca == null || !getConfig().getWcaWebserviceEndpoint().equals(endpointWca)) {
+			try {
+                endpointWca = getConfig().getWcaWebserviceEndpoint();
+                JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
+				factory.setServiceClass(WcaResults.class);
+				factory.setAddress(endpointWca);
+				clientWca = (WcaResults) factory.create();
+			} catch (Exception e) {
+				log.error("Could not create wca webservice client", e);
+			}
+		}
+		return clientWca;
 	}
 	
 	/* (non-Javadoc)
@@ -168,13 +200,14 @@ public class ResultsEngine implements Runnable {
 	 */
 	public void uploadResults(File resultsFile) {
 		setProgress(1);
-		
+
+        LiveResults client = getClient();
 		Competition competition = null;
 		
 		// load competition
 		try {
 			log.info("Loading competition: {}", getConfig().getCompetitionId());
-			competition = getClient().loadCompetition(
+			competition = client.loadCompetition(
 					getConfig().getCompetitionId(),
 					getConfig().getPassword());
 			setProgress(2);
@@ -196,12 +229,19 @@ public class ResultsEngine implements Runnable {
 				log.warn("Unexpected cell format.", e);
 			}
 		}
+
+        // check for records
+        if (competition != null) {
+            log.info("Checking for records: {}", competition.getName());
+            competition = checkForRecords(competition);
+            setProgress(5);
+        }
 		
 		// upload results
 		if (competition != null) {
 			try {
 				log.info("Saving results: {}", competition.getName());
-				getClient().saveCompetition(
+				client.saveCompetition(
 						getConfig().getCompetitionId(),
 						getConfig().getPassword(),
 						competition);
@@ -217,7 +257,7 @@ public class ResultsEngine implements Runnable {
 		}
 	}
 
-	/**
+    /**
 	 * Restart engine (config has been changed)
 	 */
 	public void restart() {
@@ -268,7 +308,123 @@ public class ResultsEngine implements Runnable {
 		}
 		return isSupported;
 	}
-	
+
+    /**
+     * Checks entire competition for unmarked records.
+     * @param competition
+     * @return
+     */
+    private Competition checkForRecords(Competition competition) {
+        try {
+            WcaResults client = getWcaClient();
+            for (Event event : competition.getEvents()) {
+                log.debug("Checking '{}' for records", event.getName());
+                String format = event.getFormat();
+                List<Result> results = event.getResults();
+                String country = null;
+
+                // sort by single result
+                Collections.sort(results, new Comparator<Result>() {
+                    @Override
+                    public int compare(Result r1, Result r2) {
+                        return r1.getBest() - r2.getBest();
+                    }
+                });
+                
+                // check for single records
+                String singleRecord = null;
+                for (Result result : results) {
+                    // only check "real" results
+                    if (result.getBest() != Result.Penalty.DNF.getValue()
+                            && result.getBest() != Result.Penalty.DNS.getValue()) {
+                        // only need to check 1 result for each country
+                        if (country != result.getCountry()) {
+                            country = result.getCountry();
+                            log.debug("Checking single result record for: {} {} in {}", new Object[]{result.getFirstname(), result.getSurname(), event.getName()});
+                            singleRecord = client.getSingleRecordType(getEventId(event), country, result.getBest());
+                            if (singleRecord != null) {
+                                if (result.getRegionalSingleRecord() == null) {
+                                    log.warn("Found a single {} for: {} {} in {}", new Object[]{singleRecord, result.getFirstname(), result.getSurname(), event.getName()});
+                                } else if (result.getRegionalSingleRecord() != singleRecord) {
+                                    log.warn("Not a single {} but a {} for: {} {} in {}", new Object[]{result.getRegionalSingleRecord(), singleRecord, result.getFirstname(), result.getSurname(), event.getName()});
+                                }
+                            } else if (result.getRegionalSingleRecord() != null) {
+                                log.warn("Not a single record for: {} {} in {}", new Object[]{result.getFirstname(), result.getSurname(), event.getName()});
+                            }
+                        } else {
+                            singleRecord = null;
+                        }
+                    }
+                    result.setRegionalSingleRecord(singleRecord);
+                }
+                country = null;
+
+                // check of average records
+                if (Event.Format.AVERAGE.getValue().equals(format) || Event.Format.MEAN.getValue().equals(format)) {
+                    // sort by average result
+                    Collections.sort(results, new Comparator<Result>() {
+                        @Override
+                        public int compare(Result r1, Result r2) {
+                            return r1.getAverage() - r2.getAverage();
+                        }
+                    });
+
+                    String averageRecord = null;
+                    for (Result result : results) {
+                        // only check "real" results
+                        if (result.getAverage() != Result.Penalty.DNF.getValue()
+                                && result.getAverage() != Result.Penalty.DNS.getValue()) {
+                            // only need to check 1 result for each country
+                            if (country != result.getCountry()) {
+                                country = result.getCountry();
+                                log.debug("Checking average result record for: {} {} in {}", new Object[]{result.getFirstname(), result.getSurname(), event.getName()});
+                                averageRecord = client.getAverageRecordType(getEventId(event), country, result.getAverage());
+                                if (averageRecord != null) {
+                                    if (result.getRegionalAverageRecord() == null) {
+                                        log.warn("Found an average {} for: {} {} in {}", new Object[]{averageRecord, result.getFirstname(), result.getSurname(), event.getName()});
+                                    } else if (result.getRegionalAverageRecord() != averageRecord) {
+                                        log.warn("Not an average {} but a {} for: {} {} in {}", new Object[]{result.getRegionalAverageRecord(), averageRecord, result.getFirstname(), result.getSurname(), event.getName()});
+                                    }
+                                } else if (result.getRegionalAverageRecord() != null) {
+                                    log.warn("Not an average record for: {} {} in {}", new Object[]{result.getFirstname(), result.getSurname(), event.getName()});
+                                }
+                            } else {
+                                averageRecord = null;
+                            }
+                        }
+                        result.setRegionalAverageRecord(averageRecord);
+                    }
+
+                // only Average and Mean formats can have average records
+                } else {
+                    for (Result result : results) {
+                        if (result.getRegionalAverageRecord() != null) {
+                            log.error("Not an average record for: {} {} in {}", new Object[]{result.getFirstname(), result.getSurname(), event.getName()});
+                            result.setRegionalAverageRecord(null);
+                        }
+                    }
+                }
+            }
+        } catch (InvalidEventException e) {
+            log.error("Invalid event type", e);
+        } catch (InvalidCountryException e) {
+            log.error("Invalid country", e);
+        } catch (Exception e) {
+			log.error("Could not init wca web client. This could be a connection problem. Endpoint: {}", getConfig().getWcaWebserviceEndpoint());
+		}
+        return competition;
+    }
+
+    /**
+     * Get WCA event id for this event.
+     * @param event
+     * @return
+     */
+    private String getEventId(Event event) {
+        // TODO: implement this
+        return event.getName();
+    }
+
 	
 	/**
 	 * Create Swing GUI

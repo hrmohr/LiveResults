@@ -106,7 +106,7 @@ public class LoggerWrapper implements Logger {
 	public void error(String arg0, Object[] arg1) {
 		log.error(arg0, arg1);
 		if (log.isErrorEnabled()) {
-		    String msgStr = MessageFormatter.format(arg0, arg1);
+		    String msgStr = MessageFormatter.arrayFormat(arg0, arg1);
 		    ResultsEngine engine = factory.getEngine();
 			if (engine != null) engine.showGuiAlert("error", msgStr);
 		}		
@@ -155,7 +155,7 @@ public class LoggerWrapper implements Logger {
 	public void error(Marker arg0, String arg1, Object[] arg2) {
 		log.error(arg0, arg1, arg2);
 		if (log.isErrorEnabled()) {
-		    String msgStr = MessageFormatter.format(arg1, arg2);
+		    String msgStr = MessageFormatter.arrayFormat(arg1, arg2);
 		    ResultsEngine engine = factory.getEngine();
 			if (engine != null) engine.showGuiAlert("error", msgStr);
 		}		
@@ -209,7 +209,7 @@ public class LoggerWrapper implements Logger {
 	public void info(String arg0, Object[] arg1) {
 		log.info(arg0, arg1);
 		if (log.isInfoEnabled()) {
-		    String msgStr = MessageFormatter.format(arg0, arg1);
+		    String msgStr = MessageFormatter.arrayFormat(arg0, arg1);
 		    ResultsEngine engine = factory.getEngine();
 			if (engine != null) engine.appendGuiMessage("info", msgStr);
 		}		
@@ -258,7 +258,7 @@ public class LoggerWrapper implements Logger {
 	public void info(Marker arg0, String arg1, Object[] arg2) {
 		log.info(arg0, arg1, arg2);
 		if (log.isInfoEnabled()) {
-		    String msgStr = MessageFormatter.format(arg1, arg2);
+		    String msgStr = MessageFormatter.arrayFormat(arg1, arg2);
 		    ResultsEngine engine = factory.getEngine();
 			if (engine != null) engine.appendGuiMessage("info", msgStr);
 		}
@@ -407,7 +407,7 @@ public class LoggerWrapper implements Logger {
 	public void warn(String arg0, Object[] arg1) {
 		log.warn(arg0, arg1);
 		if (log.isWarnEnabled()) {
-		    String msgStr = MessageFormatter.format(arg0, arg1);
+		    String msgStr = MessageFormatter.arrayFormat(arg0, arg1);
 		    ResultsEngine engine = factory.getEngine();
 			if (engine != null) engine.appendGuiMessage("warn", msgStr);
 		}	
@@ -456,7 +456,7 @@ public class LoggerWrapper implements Logger {
 	public void warn(Marker arg0, String arg1, Object[] arg2) {
 		log.warn(arg0, arg1, arg2);
 		if (log.isWarnEnabled()) {
-		    String msgStr = MessageFormatter.format(arg1, arg2);
+		    String msgStr = MessageFormatter.arrayFormat(arg1, arg2);
 		    ResultsEngine engine = factory.getEngine();
 			if (engine != null) engine.appendGuiMessage("warn", msgStr);
 		}	

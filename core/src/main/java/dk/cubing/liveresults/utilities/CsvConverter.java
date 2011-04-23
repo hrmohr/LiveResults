@@ -63,7 +63,7 @@ public class CsvConverter {
         wcaMap.put("sq1","eventsq1");
         wcaMap.put("clock","eventclock");
         wcaMap.put("666","event666");
-        wcaMap.put("777","event555");
+        wcaMap.put("777","event777");
         wcaMap.put("magic","eventmagic");
         wcaMap.put("mmagic","eventmmagic");
         wcaMap.put("444bf","event444bf");
@@ -104,7 +104,7 @@ public class CsvConverter {
         compToolMap.put("s1","eventsq1");
         compToolMap.put("cl","eventclock");
         compToolMap.put("6","event666");
-        compToolMap.put("7","event555");
+        compToolMap.put("7","event777");
         compToolMap.put("m","eventmagic");
         compToolMap.put("mm","eventmmagic");
         compToolMap.put("4b","event444bf");

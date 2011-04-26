@@ -30,6 +30,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import dk.cubing.liveresults.model.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
@@ -39,10 +40,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import dk.cubing.liveresults.model.Competitor;
-import dk.cubing.liveresults.model.Event;
-import dk.cubing.liveresults.model.RegisteredEvents;
-import dk.cubing.liveresults.model.Result;
 import dk.cubing.liveresults.uploader.LoggerWrapper;
 import dk.cubing.liveresults.uploader.LoggerWrapperFactory;
 import dk.cubing.liveresults.utilities.CountryUtil;
@@ -251,10 +248,27 @@ public class WcaParser extends ExcelParser {
 		}
 		return isValid;
 	}
-	
-	/* (non-Javadoc)
-	 * @see dk.cubing.liveresults.uploader.parser.ExcelParser#parseCompetitors(org.apache.poi.ss.usermodel.Workbook)
-	 */
+
+    @Override
+    protected Competition parseCompetitionDetails(Workbook workBook, Competition competition) throws IllegalStateException {
+        if (competition.getName() == null) { // only used when automatic upload are disabled
+            Sheet sheet = workBook.getSheet(SHEET_TYPE_REGISTRATION);
+            if (isValidRegistrationSheet(sheet)) {
+                Row row = sheet.getRow(0);
+                if (row != null) {
+                    Cell cell = row.getCell(0);
+                    if (cell != null && cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                        competition.setName(cell.getStringCellValue());
+                    }
+                }
+            }
+        }
+        return competition;
+    }
+
+    /* (non-Javadoc)
+      * @see dk.cubing.liveresults.uploader.parser.ExcelParser#parseCompetitors(org.apache.poi.ss.usermodel.Workbook)
+      */
 	@Override
 	protected List<Competitor> parseCompetitors(Workbook workBook) throws IllegalStateException {
 		List<Competitor> competitors = new CopyOnWriteArrayList<Competitor>();
@@ -373,7 +387,25 @@ public class WcaParser extends ExcelParser {
 					}
 					break;
 				}
-			}
+			} else {
+                switch (i) {
+                    case 1:
+                        log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+                        break;
+                    case 2:
+                        log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+                        break;
+                    case 3:
+                        // WCA ID are optional
+                        break;
+                    case 4:
+                        log.warn("[{}] Missing gender information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+                        break;
+                    case 5:
+                        log.warn("[{}] Missing birthday information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+                        break;
+                }
+            }
 		}
 		
 		// parse registered events
@@ -821,7 +853,19 @@ public class WcaParser extends ExcelParser {
 					}
 					break;
 				}
-			}
+			} else {
+                switch (i) {
+                    case 1:
+                        log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+                        break;
+                    case 2:
+                        log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+                        break;
+                    case 3:
+                        // WCA ID are optional
+                        break;
+                }
+            }
 		}
 	}
 	

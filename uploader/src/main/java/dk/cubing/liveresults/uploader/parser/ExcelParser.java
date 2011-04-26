@@ -51,6 +51,9 @@ public abstract class ExcelParser {
 			
 			// validate spreadsheet format
 			if (isValidSpreadsheet(workBook)) {
+
+                // parse competition details
+                competition = parseCompetitionDetails(workBook, competition);
 			
 				// parse competitors
 				List<Competitor> competitors = parseCompetitors(workBook);
@@ -90,6 +93,14 @@ public abstract class ExcelParser {
 	 * @throws IllegalStateException
 	 */
 	protected abstract boolean isValidSpreadsheet(Workbook workBook) throws IllegalStateException;
+
+    /**
+     * @param workBook
+     * @param competition
+     * @return
+     * @throws IllegalStateException
+     */
+    protected abstract Competition parseCompetitionDetails(Workbook workBook, Competition competition) throws IllegalStateException;
 
 	/**
 	 * @param workBook

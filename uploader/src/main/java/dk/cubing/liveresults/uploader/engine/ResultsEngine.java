@@ -151,7 +151,6 @@ public class ResultsEngine implements Runnable {
 					isRunning = true;
 					log.info("Engine started.");
 					setProgress(6);
-					uploadResults(getConfig().getResultsFile());
 				} else {
 					try {
 						Thread.sleep(5000);
@@ -162,22 +161,37 @@ public class ResultsEngine implements Runnable {
 			}
 		}
 	}
-	
+
+    /**
+     * @param resultsFile
+     */
+    public void uploadResults(File resultsFile) {
+        uploadResults(resultsFile, false);
+    }
+
 	/**
 	 * @param resultsFile
+     * @param forceUpload
 	 */
-	public void uploadResults(File resultsFile) {
+	public void uploadResults(File resultsFile, boolean forceUpload) {
 		setProgress(1);
 		
 		Competition competition = null;
 		
 		// load competition
 		try {
-			log.info("Loading competition: {}", getConfig().getCompetitionId());
-			competition = getClient().loadCompetition(
-					getConfig().getCompetitionId(),
-					getConfig().getPassword());
-			setProgress(2);
+            if (getConfig().doAutoUpload() || forceUpload) {
+                log.info("Loading competition: {}", getConfig().getCompetitionId());
+                competition = getClient().loadCompetition(
+                        getConfig().getCompetitionId(),
+                        getConfig().getPassword());
+                setProgress(2);
+                log.info("Competition loaded.");
+            } else {
+                log.info("Automatic upload disabled.");
+                competition = new Competition();
+                competition.setCompetitionId(getConfig().getCompetitionId());
+            }
 		} catch (BadCredentialsException e) {
 			log.error("Invalid CompetitionId and/or Password. CompetitionId: '{}', Password: '{}'", getConfig().getCompetitionId(), getConfig().getPassword());
 		} catch (CompetitionNotFoundException e) {
@@ -187,9 +201,10 @@ public class ResultsEngine implements Runnable {
 		// parse results spreadsheet
 		if (competition != null) {
 			try {
-				log.info("Parsing result file: {}", resultsFile.getName());
+				log.info("Parsing results file: {}", resultsFile.getName());
 				competition = parser.parse(competition, resultsFile.getAbsolutePath());
 				setProgress(4);
+                log.info("Results file parsed.");
 			} catch (ResultsFileParserException e) {
 				log.error("Selected spreadsheet does not appear to be based on the WCA template!", e);
 			} catch (IllegalStateException e) {
@@ -200,13 +215,15 @@ public class ResultsEngine implements Runnable {
 		// upload results
 		if (competition != null) {
 			try {
-				log.info("Saving results: {}", competition.getName());
-				getClient().saveCompetition(
-						getConfig().getCompetitionId(),
-						getConfig().getPassword(),
-						competition);
-				setProgress(6);
-				log.info("Saved results.");
+                if (getConfig().doAutoUpload() || forceUpload) {
+                    log.info("Saving results: {}", competition.getName());
+                    getClient().saveCompetition(
+                            getConfig().getCompetitionId(),
+                            getConfig().getPassword(),
+                            competition);
+                    setProgress(6);
+                    log.info("Saved results.");
+                }
 			} catch (BadCredentialsException e) {
 				log.error("Invalid CompetitionId and/or Password. CompetitionId: '{}', Password: '{}'", getConfig().getCompetitionId(), getConfig().getPassword());
 			} catch (CompetitionNotFoundException e) {
@@ -254,6 +271,7 @@ public class ResultsEngine implements Runnable {
 	 * @return
 	 */
 	public boolean isSupportedVersion() {
+        if (!getConfig().doAutoUpload()) return true; // offline mode
 		boolean isSupported = false;
 		log.info("Checking for updates...");
 		try {

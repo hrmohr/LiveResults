@@ -18,3 +18,4 @@ password=
 results.filename=
 webservice.endpoint=http://api.cubing.dk/LiveResults
 show.gui=true
+auto.upload=true

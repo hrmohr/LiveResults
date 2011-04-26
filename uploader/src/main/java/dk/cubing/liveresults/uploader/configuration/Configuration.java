@@ -146,6 +146,20 @@ public class Configuration {
 	public void setShowGUI(boolean showGui) {
 		config.setProperty("show.gui", showGui);
 	}
+
+    /**
+     * @return
+     */
+    public boolean doAutoUpload() {
+        return config.getBoolean("auto.upload");
+    }
+
+    /**
+     * @param autoUpload
+     */
+    public void setAutoUpload(boolean autoUpload) {
+        config.setProperty("auto.upload", autoUpload);
+    }
 	
 	/**
 	 * Save the current values to selected properties file

@@ -21,15 +21,14 @@ package dk.cubing.liveresults.uploader.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import dk.cubing.liveresults.uploader.engine.ResultsEngine;
 
-public class MenuBar extends JMenuBar implements ActionListener {
+public class MenuBar extends JMenuBar implements ActionListener, ItemListener {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -37,10 +36,13 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	
 	private JMenu fileMenu;
 	private JMenu helpMenu;
-	
+    private JMenu uploadMenu;
+
 	private JMenuItem preferencesItem;
 	private JMenuItem quitItem;
 	private JMenuItem aboutItem;
+    private JMenuItem uploadNowItem;
+    private JCheckBoxMenuItem autoUploadItem;
 
 	public MenuBar(ResultsEngine engine) {
 		super();
@@ -55,6 +57,17 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		quitItem.addActionListener(this);
 		fileMenu.add(quitItem);
 		add(fileMenu);
+
+        uploadMenu = new JMenu("Upload");
+        uploadNowItem = new JMenuItem("Upload now");
+        uploadNowItem.addActionListener(this);
+        uploadMenu.add(uploadNowItem);
+
+        autoUploadItem = new JCheckBoxMenuItem("Automatic upload");
+        autoUploadItem.setState(engine.getConfig().doAutoUpload());
+        autoUploadItem.addItemListener(this);
+        uploadMenu.add(autoUploadItem);
+        add(uploadMenu);
 		
 		helpMenu = new JMenu("Help");
 		aboutItem = new JMenuItem("About Live Results");
@@ -75,7 +88,17 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		    JOptionPane.showMessageDialog(null, "\u00A9 2009-2010 Mads Mohr Christensen\nhttp://live.speedcubing.dk/", "About Live Results", JOptionPane.INFORMATION_MESSAGE);
 		} else if (source == preferencesItem) {
 			engine.createAndShowPreferencesDialog();
-		}
+		} else if (source == uploadNowItem) {
+            engine.uploadResults(engine.getConfig().getResultsFile(), true);
+        }
 	}
-	
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        Object source = e.getSource();
+        if (source == autoUploadItem) {
+            engine.getConfig().setAutoUpload(e.getStateChange() == ItemEvent.SELECTED);
+            engine.getConfig().save();
+        }
+    }
 }

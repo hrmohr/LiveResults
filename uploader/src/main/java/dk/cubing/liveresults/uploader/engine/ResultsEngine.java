@@ -99,7 +99,7 @@ public class ResultsEngine implements Runnable {
 	/**
 	 * @return the client
 	 */
-	public LiveResults getClient() {
+	public LiveResults getClient() throws Exception {
 		// lazy init and endpoint reloading
 		if (client == null || !getConfig().getWebserviceEndpoint().equals(factory.getAddress())) {
 			try {
@@ -108,6 +108,7 @@ public class ResultsEngine implements Runnable {
 				client = (LiveResults) factory.create();
 			} catch (Exception e) {
 				log.error("Could not create webservice client", e);
+                throw e;
 			}
 		}
 		return client;
@@ -196,42 +197,44 @@ public class ResultsEngine implements Runnable {
 			log.error("Invalid CompetitionId and/or Password. CompetitionId: '{}', Password: '{}'", getConfig().getCompetitionId(), getConfig().getPassword());
 		} catch (CompetitionNotFoundException e) {
 			log.error("Could not load competition: {}", getConfig().getCompetitionId(), e);
-		}
-		
-		// parse results spreadsheet
+		} catch (Exception e) {
+            log.error(e.getLocalizedMessage(), e);
+        }
+
+        // parse results spreadsheet
 		if (competition != null) {
 			try {
 				log.info("Parsing results file: {}", resultsFile.getName());
 				competition = parser.parse(competition, resultsFile.getAbsolutePath());
 				setProgress(4);
                 log.info("Results file parsed.");
-			} catch (ResultsFileParserException e) {
-				log.error("Selected spreadsheet does not appear to be based on the WCA template!", e);
-			} catch (IllegalStateException e) {
-				log.warn("Unexpected cell format.", e);
-			}
-		}
-		
-		// upload results
-		if (competition != null) {
-			try {
-                if (getConfig().doAutoUpload() || forceUpload) {
-                    log.info("Saving results: {}", competition.getName());
-                    getClient().saveCompetition(
-                            getConfig().getCompetitionId(),
-                            getConfig().getPassword(),
-                            competition);
-                    setProgress(6);
-                    log.info("Saved results.");
+
+                // upload results
+                try {
+                    if (getConfig().doAutoUpload() || forceUpload) {
+                        log.info("Saving results: {}", competition.getName());
+                        getClient().saveCompetition(
+                                getConfig().getCompetitionId(),
+                                getConfig().getPassword(),
+                                competition);
+                        setProgress(6);
+                        log.info("Saved results.");
+                    }
+                } catch (BadCredentialsException e) {
+                    log.error("Invalid CompetitionId and/or Password. CompetitionId: '{}', Password: '{}'", getConfig().getCompetitionId(), getConfig().getPassword());
+                } catch (CompetitionNotFoundException e) {
+                    log.error("Could not load competition: {}", getConfig().getCompetitionId(), e);
+                } catch (CompetitionSaveException e) {
+                    log.error("Could not save competition: {}", getConfig().getCompetitionId(), e);
+                } catch (Exception e) {
+                    log.error(e.getLocalizedMessage(), e);
                 }
-			} catch (BadCredentialsException e) {
-				log.error("Invalid CompetitionId and/or Password. CompetitionId: '{}', Password: '{}'", getConfig().getCompetitionId(), getConfig().getPassword());
-			} catch (CompetitionNotFoundException e) {
-				log.error("Could not load competition: {}", getConfig().getCompetitionId(), e);
-			} catch (CompetitionSaveException e) {
-				log.error("Could not save competition: {}", getConfig().getCompetitionId(), e);
-			}
-		}
+            } catch (ResultsFileParserException e) {
+                log.error("Selected spreadsheet does not appear to be based on the WCA template!", e);
+            } catch (IllegalStateException e) {
+                log.warn("Unexpected cell format.", e);
+            }
+        }
 	}
 
 	/**

@@ -74,17 +74,20 @@ public abstract class ExcelParser {
 			
 		} catch (FileNotFoundException e) {
 			log.error("Results file not found: {}", filename);
+            throw new ResultsFileParserException(e.getLocalizedMessage(), e);
 		} catch (InvalidFormatException e) {
 			log.error("Results file has an invalid format.", e);
+            throw new ResultsFileParserException(e.getLocalizedMessage(), e);
 		} catch (IOException e) {
 			log.error("Error reading results file.", e);
+            throw new ResultsFileParserException(e.getLocalizedMessage(), e);
 		} catch (IllegalStateException e) {
+            log.error(e.getLocalizedMessage(), e);
 			throw e;
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);
+            throw new ResultsFileParserException(e.getLocalizedMessage(), e);
 		}
-
-		return null;
 	}
 	
 	/**

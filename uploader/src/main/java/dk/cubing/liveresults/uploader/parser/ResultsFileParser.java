@@ -61,7 +61,7 @@ public class ResultsFileParser {
 		} catch (IllegalStateException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ResultsFileParserException(e);
+			throw new ResultsFileParserException(e.getLocalizedMessage(), e);
 		}
 		return null;
 	}

@@ -320,7 +320,7 @@ public class WcaParser extends ExcelParser {
 							competitor.setSurname(StringUtil.parseSurname(name));
 							log.debug("Found competitor: {}", name);
 						} else {
-							log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+							log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
 						}
 					}
 					break;
@@ -339,7 +339,7 @@ public class WcaParser extends ExcelParser {
 							competitor.setCountry(countryCode);
 							log.debug("Country: {} - {}", countryCode, country);
 						} else {
-							log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+							log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
 						}
 					}
 					break;
@@ -358,7 +358,7 @@ public class WcaParser extends ExcelParser {
 								log.warn("[{}] Invalid wcaId format: {}", row.getSheet().getSheetName(), wcaId);
 							}
 						} else {
-							log.warn("[{}] Entered WCA id has wrong length. Expected: 10, Was: {}. Row: {}", new Object[]{row.getSheet().getSheetName(), wcaId.length(), row.getRowNum()});
+							log.warn("[{}] Entered WCA id has wrong length. Expected: 10, Was: {}. Row: {}", new Object[]{row.getSheet().getSheetName(), wcaId.length(), row.getRowNum()+1});
 						}
 					}
 					break;
@@ -369,7 +369,7 @@ public class WcaParser extends ExcelParser {
 					if (gender != null) {
 						log.debug("Gender: {}", ("f".equalsIgnoreCase(gender)? "Female" : "Male"));
 					} else {
-						log.warn("[{}] Missing gender information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+						log.warn("[{}] Missing gender information for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
 					}
 					break;
 					
@@ -383,26 +383,26 @@ public class WcaParser extends ExcelParser {
 							log.warn("[{}] Invalid birthday format: {}", row.getSheet().getSheetName(), birthday);
 						}
 					} else {
-						log.warn("[{}] Missing birthday information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+						log.warn("[{}] Missing birthday information for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
 					}
 					break;
 				}
 			} else {
                 switch (i) {
                     case 1:
-                        log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+                        log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
                         break;
                     case 2:
-                        log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+                        log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
                         break;
                     case 3:
                         // WCA ID are optional
                         break;
                     case 4:
-                        log.warn("[{}] Missing gender information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+                        log.warn("[{}] Missing gender information for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
                         break;
                     case 5:
-                        log.warn("[{}] Missing birthday information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+                        log.warn("[{}] Missing birthday information for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
                         break;
                 }
             }
@@ -653,7 +653,7 @@ public class WcaParser extends ExcelParser {
 				log.error("[{}] Unsupported format: {}", row.getSheet().getSheetName(), event.getFormat());
 			}
 		} else {
-			log.debug("[{}] Skipping results for competitor with no name and/or country: Row: {}", row.getSheet().getSheetName(), row.getRowNum());
+			log.debug("[{}] Skipping results for competitor with no name and/or country: Row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
 		}
 		return result;
 	}
@@ -810,7 +810,7 @@ public class WcaParser extends ExcelParser {
 							result.setSurname(StringUtil.parseSurname(name));
 							log.debug("Found result for : {}", name);
 						} else {
-							log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+							log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
 						}
 					}
 					break;
@@ -829,7 +829,7 @@ public class WcaParser extends ExcelParser {
 							result.setCountry(countryCode);
 							log.debug("Country: {} - {}", countryCode, country);
 						} else {
-							log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+							log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
 						}
 					}
 					break;
@@ -848,7 +848,7 @@ public class WcaParser extends ExcelParser {
 								log.warn("[{}] Invalid wcaId format: {}", row.getSheet().getSheetName(), wcaId);
 							}
 						} else {
-							log.warn("[{}] Entered WCA id has wrong length. Expected: 10, Was: {}. Row: {}", new Object[]{row.getSheet().getSheetName(), wcaId.length(), row.getRowNum()});
+							log.warn("[{}] Entered WCA id has wrong length. Expected: 10, Was: {}. Row: {}", new Object[]{row.getSheet().getSheetName(), wcaId.length(), row.getRowNum()+1});
 						}
 					}
 					break;
@@ -856,10 +856,14 @@ public class WcaParser extends ExcelParser {
 			} else {
                 switch (i) {
                     case 1:
-                        log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+                        if (result.getCountry() != null) {
+                            log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
+                        }
                         break;
                     case 2:
-                        log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+                        if (result.getFirstname() != null) {
+                            log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
+                        }
                         break;
                     case 3:
                         // WCA ID are optional
@@ -888,7 +892,7 @@ public class WcaParser extends ExcelParser {
 					result.setSurname(StringUtil.parseSurname(name1) + " / " + StringUtil.parseSurname(name2));
 					log.debug("Found result for : {} / {}", name1, name2);
 				} else {
-					log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+					log.error("[{}] Missing firstname and/or surname for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
 				}
 			}
 		}
@@ -912,7 +916,7 @@ public class WcaParser extends ExcelParser {
 					result.setCountry(countryCode1); //TODO: for now we only support 1 country
 					log.debug("Country: {} - {} / {} - {}", new Object[]{countryCode1, country1, countryCode1, country1});
 				} else {
-					log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum());
+					log.error("[{}] Missing country information for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
 				}
 			}
 		}
@@ -935,7 +939,7 @@ public class WcaParser extends ExcelParser {
 						log.warn("[{}] Invalid wcaId format: {} / {}", new Object[]{row.getSheet().getSheetName(), wcaId1, wcaId2});
 					}
 				} else {
-					log.warn("[{}] Entered WCA id has wrong length. Expected: 10, Was: {} / {}. Row: {}", new Object[]{row.getSheet().getSheetName(), wcaId1.length(), wcaId2.length(), row.getRowNum()});
+					log.warn("[{}] Entered WCA id has wrong length. Expected: 10, Was: {} / {}. Row: {}", new Object[]{row.getSheet().getSheetName(), wcaId1.length(), wcaId2.length(), row.getRowNum()+1});
 				}
 			}
 		}

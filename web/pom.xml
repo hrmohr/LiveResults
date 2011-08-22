@@ -41,11 +41,11 @@
 		<struts2.version>2.1.8.1</struts2.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<ehcache.version>1.6.2</ehcache.version>
-		<ehcache-web.version>2.0.0</ehcache-web.version>
+		<ehcache-web.version>2.0.3</ehcache-web.version>
 		<fop.version>0.95-1</fop.version>
 		<opencsv.version>2.0</opencsv.version>
 		<poi.version>3.6</poi.version>
-		<ical4j.version>1.0-rc3</ical4j.version>
+		<ical4j.version>1.0</ical4j.version>
 		<commons-email.version>1.2</commons-email.version>
 	</properties>
 

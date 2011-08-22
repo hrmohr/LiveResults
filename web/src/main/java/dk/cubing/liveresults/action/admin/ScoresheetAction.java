@@ -39,10 +39,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
-import org.apache.commons.mail.SimpleEmail;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -870,18 +870,18 @@ public class ScoresheetAction extends FrontendAction {
                 is.close();
 
                 // build special registration sheet
-                /*
                 generateRegistrationSheet(workBook, getCompetition());
 
+                /*
                 // build result sheets
                 generateResultSheets(
                         workBook,
                         getCompetition()
                 );
+                */
 
                 // set default selected sheet
                 workBook.setActiveSheet(workBook.getSheetIndex(SHEET_TYPE_REGISTRATION));
-                */
 
                 // write workbook to temp file
                 File temp = File.createTempFile(getCompetitionId(), ".xls");
@@ -898,17 +898,21 @@ public class ScoresheetAction extends FrontendAction {
 
                 // send email
                 MultiPartEmail email = new MultiPartEmail();
-                email.setCharset(SimpleEmail.ISO_8859_1);
+                email.setCharset(Email.ISO_8859_1);
                 email.setHostName(getText("email.smtp.server"));
                 if (!getText("email.username").isEmpty() && !getText("email.password").isEmpty()) {
                     email.setAuthentication(getText("email.username"), getText("email.password"));
                 }
                 email.setSSL("true".equals(getText("email.ssl")));
                 email.setSubject("Results from " + getCompetition().getName());
-                email.setMsg("mail body goes here");
+                email.setMsg(getText("admin.submitresults.message", new String[]{
+                		getCompetition().getName(),
+                		getCompetition().getOrganiser()
+                }));
                 //email.addTo(getText("admin.submitresults.resultsteamEmail"), getText("admin.submitresults.resultsteam"));
                 email.addTo("hr.mohr@gmail.com", "Mads Mohr Christensen");
                 email.setFrom(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
+                email.addCc(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
                 //email.addCc(getCompetition().getWcaDelegateEmail(), getCompetition().getWcaDelegate());
                 email.attach(attachment);
                 email.send();

@@ -238,6 +238,19 @@
             </result>
         </action>
         <!-- Upload results end -->
+
+        <!-- Submit results begin -->
+        <action name="submitResults" class="submitResultsAction" method="list">
+            <result name="success" type="dispatcher">/WEB-INF/pages/admin/submitResultsForm.jsp
+            </result>
+        </action>
+        <action name="sendResults" class="submitResultsAction" method="sendResults">
+            <result name="input" type="dispatcher">/WEB-INF/pages/admin/submitResultsForm.jsp
+			</result>
+			<result name="success" type="dispatcher">/WEB-INF/pages/admin/resultsSent.jsp
+			</result>
+        </action>
+        <!-- Submit results end -->
 	</package>
 
 </struts>

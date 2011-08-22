@@ -35,6 +35,10 @@
 	            <s:url id="resultsUrl" action="uploadResults" namespace="/admin" />
                 <dt><s:a href="%{resultsUrl}"><s:text name="admin.index.results" /></s:a></dt>
                 <dd><s:text name="admin.index.results" /></dd>
+
+                <s:url id="submitResultsUrl" action="submitResults" namespace="/admin" />
+                <dt><s:a href="%{submitResultsUrl}"><s:text name="admin.index.submitresults" /></s:a></dt>
+                <dd><s:text name="admin.index.submitresults" /></dd>
 	            
 	            <s:url id="diplomasUrl" action="diplomas" namespace="/admin" />
 	            <dt><s:a href="%{diplomasUrl}"><s:text name="admin.menu.diplomas" /></s:a></dt>

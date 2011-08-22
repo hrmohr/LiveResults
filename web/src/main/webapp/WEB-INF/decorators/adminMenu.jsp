@@ -43,6 +43,11 @@
             <c:when test="${param.selectedMenu == 'Upload results'}"><td><div class="item"><s:a href="%{resultsUrl}" id="activePage"><s:text name="admin.menu.results" /></s:a></div></td></c:when>
             <c:otherwise><td><div class="item"><s:a href="%{resultsUrl}"><s:text name="admin.menu.results" /></s:a></div></td></c:otherwise>
         </c:choose>
+        <s:url id="submitResultsUrl" action="submitResults" namespace="/admin" />
+        <c:choose>
+            <c:when test="${param.selectedMenu == 'Submit results'}"><td><div class="item"><s:a href="%{submitResultsUrl}" id="activePage"><s:text name="admin.menu.submitresults" /></s:a></div></td></c:when>
+            <c:otherwise><td><div class="item"><s:a href="%{submitResultsUrl}"><s:text name="admin.menu.submitresults" /></s:a></div></td></c:otherwise>
+        </c:choose>
         <s:url id="diplomasUrl" action="diplomas" namespace="/admin" />
         <c:choose>
             <c:when test="${param.selectedMenu == 'Diplomas'}"><td><div class="item"><s:a href="%{diplomasUrl}" id="activePage"><s:text name="admin.menu.diplomas" /></s:a></div></td></c:when>

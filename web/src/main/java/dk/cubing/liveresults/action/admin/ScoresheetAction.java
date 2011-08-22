@@ -836,6 +836,13 @@ public class ScoresheetAction extends FrontendAction {
 		}
 	}
 
+    /**
+     * @return
+     */
+    public String sendResults() {
+        return Action.SUCCESS;
+    }
+
 	/**
 	 * @param workBook
 	 * @param competition

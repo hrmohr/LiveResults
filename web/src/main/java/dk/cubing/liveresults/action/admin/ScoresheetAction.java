@@ -16,7 +16,17 @@
  */
 package dk.cubing.liveresults.action.admin;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,7 +39,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import dk.cubing.liveresults.utilities.CsvConverter;
+import org.apache.commons.mail.EmailAttachment;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.MultiPartEmail;
+import org.apache.commons.mail.SimpleEmail;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -54,6 +67,7 @@ import dk.cubing.liveresults.model.Event;
 import dk.cubing.liveresults.model.RegisteredEvents;
 import dk.cubing.liveresults.service.CompetitionService;
 import dk.cubing.liveresults.utilities.CountryUtil;
+import dk.cubing.liveresults.utilities.CsvConverter;
 import dk.cubing.liveresults.utilities.StringUtil;
 
 @Secured( { "ROLE_USER" })
@@ -840,7 +854,66 @@ public class ScoresheetAction extends FrontendAction {
      * @return
      */
     public String sendResults() {
-        return Action.SUCCESS;
+    	try {
+			// load WCA template from file
+			InputStream is = ServletActionContext.getServletContext().getResourceAsStream(getSpreadSheetFilename());
+			Workbook workBook;
+			workBook = WorkbookFactory.create(is);
+			is.close();
+			
+			// build special registration sheet
+			/*
+			generateRegistrationSheet(workBook, getCompetition());
+			
+			// build result sheets
+			generateResultSheets(
+					workBook, 
+					getCompetition() 
+			);
+
+			// set default selected sheet
+			workBook.setActiveSheet(workBook.getSheetIndex(SHEET_TYPE_REGISTRATION));
+			*/
+			
+			// write workbook to temp file
+			File temp = File.createTempFile(getCompetitionId(), ".xls");
+			temp.deleteOnExit();
+			OutputStream os = new FileOutputStream(temp);
+			workBook.write(os);
+			os.close();
+			
+			// Create the attachment
+			EmailAttachment attachment = new EmailAttachment();
+			attachment.setPath(temp.getPath());
+			attachment.setDisposition(EmailAttachment.ATTACHMENT);
+			attachment.setName(getCompetitionId() + ".xls");
+			
+			// send email
+			MultiPartEmail email = new MultiPartEmail();
+			email.setCharset(SimpleEmail.ISO_8859_1);
+			email.setHostName(getText("email.smtp.server"));
+			if (!getText("email.username").isEmpty() && !getText("email.password").isEmpty()) {
+				email.setAuthentication(getText("email.username"), getText("email.password"));
+			}
+			email.setSSL("true".equals(getText("email.ssl")));
+			email.setSubject("Results from " + getCompetition().getName());
+			email.setMsg("mail body goes here");
+			//email.addTo(getText("admin.submitresults.resultsteamEmail"), getText("admin.submitresults.resultsteam"));
+			email.addTo("hr.mohr@gmail.com", "Mads Mohr Christensen");
+			email.setFrom(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
+			//email.addCc(getCompetition().getWcaDelegateEmail(), getCompetition().getWcaDelegate());
+			email.attach(attachment);
+			email.send();
+			
+			return Action.SUCCESS;
+		} catch (InvalidFormatException e) {
+			log.error("Spreadsheet template are using an unsupported format.", e);
+		} catch (IOException e) {
+			log.error("Error reading spreadsheet template.", e);
+		} catch (EmailException e) {
+			log.error(e.getMessage(), e);
+		}
+		return Action.ERROR;
     }
 
 	/**
@@ -976,6 +1049,16 @@ public class ScoresheetAction extends FrontendAction {
 			
 			// loop
 			i++;
+		}
+	}
+	
+	/**
+	 * @param workBook
+	 * @param competition
+	 */
+	private void generateResultSheets(Workbook workBook, Competition competition) {
+		for (Event event : competition.getEvents()) {
+			
 		}
 	}
 

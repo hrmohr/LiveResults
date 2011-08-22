@@ -363,21 +363,28 @@ public class WcaParser extends ExcelParser {
 					}
 					break;
 					
-				// parse gender (currently not used)
+				// parse gender
 				case 4:
 					String gender = cell.getStringCellValue();
 					if (gender != null) {
-						log.debug("Gender: {}", ("f".equalsIgnoreCase(gender)? "Female" : "Male"));
+						gender = gender.toLowerCase();
+						if ("f".equals(gender) || "m".equals(gender)) {
+							competitor.setGender(gender);
+							log.debug("Gender: {}", ("f".equals(gender)? "Female" : "Male"));
+						} else {
+							log.warn("[{}] Invalid gender: {}", row.getSheet().getSheetName(), gender);
+						}
 					} else {
 						log.warn("[{}] Missing gender information for row: {}", row.getSheet().getSheetName(), row.getRowNum()+1);
 					}
 					break;
 					
-				// parse birthday (currently not used)
+				// parse birthday
 				case 5:
 					Date birthday = cell.getDateCellValue();
 					if (birthday != null) {
 						try {
+							competitor.setBirthday(birthday);
 							log.debug("Birthday: {}", birthdayFormat.format(birthday));
 						} catch (Exception e) {
 							log.warn("[{}] Invalid birthday format: {}", row.getSheet().getSheetName(), birthday);

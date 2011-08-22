@@ -30,7 +30,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 @Entity
 @NamedQueries({
@@ -52,13 +51,9 @@ public class Competitor {
 	private String surname;
 	@Column(length = 2)
 	private String country;
-	
 	@Column(length = 1)
-	@Transient
 	private String gender;
-	
 	@Temporal(value = TemporalType.DATE)
-	@Transient
 	private Date birthday;
 	
 	@OneToOne(cascade = CascadeType.ALL)

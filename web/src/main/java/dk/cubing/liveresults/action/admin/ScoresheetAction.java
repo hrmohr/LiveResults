@@ -872,13 +872,11 @@ public class ScoresheetAction extends FrontendAction {
                 // build special registration sheet
                 generateRegistrationSheet(workBook, getCompetition());
 
-                /*
                 // build result sheets
                 generateResultSheets(
                         workBook,
                         getCompetition()
                 );
-                */
 
                 // set default selected sheet
                 workBook.setActiveSheet(workBook.getSheetIndex(SHEET_TYPE_REGISTRATION));
@@ -912,7 +910,7 @@ public class ScoresheetAction extends FrontendAction {
                 //email.addTo(getText("admin.submitresults.resultsteamEmail"), getText("admin.submitresults.resultsteam"));
                 email.addTo("hr.mohr@gmail.com", "Mads Mohr Christensen");
                 email.setFrom(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
-                email.addCc(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
+                //email.addCc(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
                 //email.addCc(getCompetition().getWcaDelegateEmail(), getCompetition().getWcaDelegate());
                 email.attach(attachment);
                 email.send();
@@ -1073,7 +1071,16 @@ public class ScoresheetAction extends FrontendAction {
 	 */
 	private void generateResultSheets(Workbook workBook, Competition competition) {
 		for (Event event : competition.getEvents()) {
-			
+			boolean isTeamEvent = Event.TimeFormat.TEAM.getValue().equals(event.getTimeFormat());
+			if (!isTeamEvent) {
+				// get sheet template
+				Sheet template = getResultSheet(workBook, event.getFormat(), event.getTimeFormat());
+				if (template != null) {
+					createResultSheetFromTemplate(workBook, template, competition, event, null, true);
+				} else {
+					log.warn("Could not get result sheet template. This could be a problem, Format: {}, Time format: {}", "a", "s");
+				}
+			}
 		}
 	}
 

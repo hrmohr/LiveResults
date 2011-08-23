@@ -5,16 +5,16 @@
 
 <html>
     <head>
-        <title><s:text name="admin.submitresults.title" /></title>
+        <title><s:text name="admin.export.title" /></title>
     </head>
     <body>
         <s:include value="/WEB-INF/decorators/adminMenu.jsp">
-            <s:param name="selectedMenu">Submit results</s:param>
+            <s:param name="selectedMenu">Export</s:param>
         </s:include>
 
-        <h1><s:text name="admin.submitresults.title" /></h1>
+        <h1><s:text name="admin.export.title" /></h1>
         
-        <s:form method="POST" action="sendResults">
+        <s:form method="POST" action="exportResults">
             <s:token />
             
 	        <table class="formTable" id="choices">
@@ -31,18 +31,22 @@
                             cssClass="drop">
                         </s:select>
                     </div></td>
+                    <td>&nbsp;</td>
+	                <td valign="bottom"><s:checkbox id="submitResultsToWCA" name="submitResultsToWCA" label="%{getText('admin.export.submitResultsToWCA')}" labelposition="right" /></td>
                 </tr>
                 </sec:authorize>
 		        <sec:authorize ifNotGranted="ROLE_ADMIN">
 		        <tr>
                     <td><div class="space"><s:textfield id="competitionId" name="competitionId" label="%{getText('admin.competition.id')}" value="%{#session.SPRING_SECURITY_LAST_USERNAME}" readonly="true" required="true" /></div></td>
+                    <td>&nbsp;</td>
+	                <td valign="bottom"><s:checkbox id="submitResultsToWCA" name="submitResultsToWCA" label="%{getText('admin.export.submitResultsToWCA')}" labelposition="right" /></td>
                 </tr>
 		        </sec:authorize>
 	            <tr>
-	                <td><div class="space"><s:text name="admin.submitresults.info" /></div></td>
+	                <td colspan="3"><div class="space"><s:text name="admin.export.info" /></div></td>
 	            </tr>
 	            <tr>
-	                <td align="right"><table><tr><td><div class="space"><div class="buttborder"><s:submit value="%{getText('admin.submitresults.submit')}" cssClass="butt" /></div></div></td></tr></table></td>
+	                <td align="right" colspan="3"><table><tr><td><div class="space"><div class="buttborder"><s:submit value="%{getText('admin.export.submit')}" cssClass="butt" /></div></div></td></tr></table></td>
 	            </tr>
 	        </table>
 	    </s:form>

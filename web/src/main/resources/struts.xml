@@ -249,6 +249,13 @@
 			</result>
 			<result name="success" type="dispatcher">/WEB-INF/pages/admin/resultsExported.jsp
 			</result>
+            <result name="pdf" type="stream">
+				<param name="contentType">application/pdf</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">${contentDisposition}</param>
+				<param name="bufferSize">1024</param>
+			</result>
         </action>
         <!-- Submit results end -->
 	</package>

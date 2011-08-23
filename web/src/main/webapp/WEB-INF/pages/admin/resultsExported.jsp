@@ -5,17 +5,17 @@
 
 <html>
     <head>
-        <title><s:text name="admin.submitresults.title" /></title>
+        <title><s:text name="admin.export.title" /></title>
     </head>
     <body>
         <s:include value="/WEB-INF/decorators/adminMenu.jsp">
             <s:param name="selectedMenu">Submit results</s:param>
         </s:include>
 
-        <h1><s:text name="admin.submitresults.title" /></h1>
+        <h1><s:text name="admin.export.title" /></h1>
 
-        <p><s:text name="admin.submitresults.submitted" /></p>
+        <p><s:text name="admin.export.submitted" /></p>
 
-        <s:a action="submitResults"><s:text name="admin.submitresults.back" /></s:a>
+        <s:a action="export"><s:text name="admin.export.back" /></s:a>
     </body>
 </html>

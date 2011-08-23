@@ -45,8 +45,8 @@
         </c:choose>
         <s:url id="exportResultsUrl" action="export" namespace="/admin" />
         <c:choose>
-            <c:when test="${param.selectedMenu == 'Export'}"><td><div class="item"><s:a href="%{exportResultsUrl}" id="activePage"><s:text name="admin.menu.exportresults" /></s:a></div></td></c:when>
-            <c:otherwise><td><div class="item"><s:a href="%{exportResultsUrl}"><s:text name="admin.menu.exportresults" /></s:a></div></td></c:otherwise>
+            <c:when test="${param.selectedMenu == 'Export'}"><td><div class="item"><s:a href="%{exportResultsUrl}" id="activePage"><s:text name="admin.menu.export" /></s:a></div></td></c:when>
+            <c:otherwise><td><div class="item"><s:a href="%{exportResultsUrl}"><s:text name="admin.menu.export" /></s:a></div></td></c:otherwise>
         </c:choose>
         <s:url id="diplomasUrl" action="diplomas" namespace="/admin" />
         <c:choose>

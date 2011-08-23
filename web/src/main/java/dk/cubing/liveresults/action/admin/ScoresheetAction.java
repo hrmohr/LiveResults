@@ -125,6 +125,8 @@ public class ScoresheetAction extends FrontendAction {
 	
 	private String spreadSheetFilename;
 	private ByteArrayOutputStream out;
+
+    private boolean submitResultsToWCA = false;
 	
 	public ScoresheetAction() {
 		initMap();
@@ -459,8 +461,22 @@ public class ScoresheetAction extends FrontendAction {
 	public String getSpreadSheetFilename() {
 		return spreadSheetFilename;
 	}
-	
-	/**
+
+    /**
+     * @return
+     */
+    public boolean isSubmitResultsToWCA() {
+        return submitResultsToWCA;
+    }
+
+    /**
+     * @param submitResultsToWCA
+     */
+    public void setSubmitResultsToWCA(boolean submitResultsToWCA) {
+        this.submitResultsToWCA = submitResultsToWCA;
+    }
+
+    /**
 	 * @return
 	 */
 	public InputStream getInputStream () {
@@ -878,41 +894,52 @@ public class ScoresheetAction extends FrontendAction {
                 // set default selected sheet
                 workBook.setActiveSheet(workBook.getSheetIndex(SHEET_TYPE_REGISTRATION));
 
-                // write workbook to temp file
-                File temp = File.createTempFile(getCompetitionId(), ".xls");
-                temp.deleteOnExit();
-                OutputStream os = new FileOutputStream(temp);
-                workBook.write(os);
-                os.close();
+                // email or just output to pdf?
+                if (isSubmitResultsToWCA()) {
+                    // write workbook to temp file
+                    File temp = File.createTempFile(getCompetitionId(), ".xls");
+                    temp.deleteOnExit();
+                    OutputStream os = new FileOutputStream(temp);
+                    workBook.write(os);
+                    os.close();
 
-                // Create the attachment
-                EmailAttachment attachment = new EmailAttachment();
-                attachment.setPath(temp.getPath());
-                attachment.setDisposition(EmailAttachment.ATTACHMENT);
-                attachment.setName(getCompetitionId() + ".xls");
+                    // Create the attachment
+                    EmailAttachment attachment = new EmailAttachment();
+                    attachment.setPath(temp.getPath());
+                    attachment.setDisposition(EmailAttachment.ATTACHMENT);
+                    attachment.setName(getCompetitionId() + ".xls");
 
-                // send email
-                MultiPartEmail email = new MultiPartEmail();
-                email.setCharset(Email.ISO_8859_1);
-                email.setHostName(getText("email.smtp.server"));
-                if (!getText("email.username").isEmpty() && !getText("email.password").isEmpty()) {
-                    email.setAuthentication(getText("email.username"), getText("email.password"));
+                    // send email
+                    MultiPartEmail email = new MultiPartEmail();
+                    email.setCharset(Email.ISO_8859_1);
+                    email.setHostName(getText("email.smtp.server"));
+                    if (!getText("email.username").isEmpty() && !getText("email.password").isEmpty()) {
+                        email.setAuthentication(getText("email.username"), getText("email.password"));
+                    }
+                    email.setSSL("true".equals(getText("email.ssl")));
+                    email.setSubject("Results from " + getCompetition().getName());
+                    email.setMsg(getText("admin.submitresults.message", new String[]{
+                            getCompetition().getName(),
+                            getCompetition().getOrganiser()
+                    }));
+                    //email.addTo(getText("admin.submitresults.resultsteamEmail"), getText("admin.submitresults.resultsteam"));
+                    email.addTo("hr.mohr@gmail.com", "Mads Mohr Christensen");
+                    email.setFrom(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
+                    //email.addCc(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
+                    //email.addCc(getCompetition().getWcaDelegateEmail(), getCompetition().getWcaDelegate());
+                    email.attach(attachment);
+                    email.send();
+
+                    return Action.SUCCESS;
+                } else {
+                    // output generated spreadsheet
+                    log.debug("Ouputting generated workbook");
+                    out = new ByteArrayOutputStream();
+                    workBook.write(out);
+                    out.close();
+
+                    return "pdf";
                 }
-                email.setSSL("true".equals(getText("email.ssl")));
-                email.setSubject("Results from " + getCompetition().getName());
-                email.setMsg(getText("admin.submitresults.message", new String[]{
-                		getCompetition().getName(),
-                		getCompetition().getOrganiser()
-                }));
-                //email.addTo(getText("admin.submitresults.resultsteamEmail"), getText("admin.submitresults.resultsteam"));
-                email.addTo("hr.mohr@gmail.com", "Mads Mohr Christensen");
-                email.setFrom(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
-                //email.addCc(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
-                //email.addCc(getCompetition().getWcaDelegateEmail(), getCompetition().getWcaDelegate());
-                email.attach(attachment);
-                email.send();
-
-                return Action.SUCCESS;
             } catch (InvalidFormatException e) {
                 log.error("Spreadsheet template are using an unsupported format.", e);
             } catch (IOException e) {

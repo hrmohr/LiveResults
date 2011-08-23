@@ -37,8 +37,8 @@
                 <dd><s:text name="admin.index.results" /></dd>
 
                 <s:url id="exportResultsUrl" action="export" namespace="/admin" />
-                <dt><s:a href="%{exportResultsUrl}"><s:text name="admin.index.exportresults" /></s:a></dt>
-                <dd><s:text name="admin.index.exportresults" /></dd>
+                <dt><s:a href="%{exportResultsUrl}"><s:text name="admin.index.export" /></s:a></dt>
+                <dd><s:text name="admin.index.export" /></dd>
 	            
 	            <s:url id="diplomasUrl" action="diplomas" namespace="/admin" />
 	            <dt><s:a href="%{diplomasUrl}"><s:text name="admin.menu.diplomas" /></s:a></dt>

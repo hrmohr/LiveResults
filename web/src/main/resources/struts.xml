@@ -240,14 +240,14 @@
         <!-- Upload results end -->
 
         <!-- Submit results begin -->
-        <action name="submitResults" class="submitResultsAction" method="list">
-            <result name="success" type="dispatcher">/WEB-INF/pages/admin/submitResultsForm.jsp
+        <action name="export" class="exportResultsAction" method="list">
+            <result name="success" type="dispatcher">/WEB-INF/pages/admin/exportResultsForm.jsp
             </result>
         </action>
-        <action name="sendResults" class="submitResultsAction" method="sendResults">
-            <result name="input" type="dispatcher">/WEB-INF/pages/admin/submitResultsForm.jsp
+        <action name="exportResults" class="exportResultsAction" method="exportResults">
+            <result name="input" type="dispatcher">/WEB-INF/pages/admin/exportResultsForm.jsp
 			</result>
-			<result name="success" type="dispatcher">/WEB-INF/pages/admin/resultsSent.jsp
+			<result name="success" type="dispatcher">/WEB-INF/pages/admin/resultsExported.jsp
 			</result>
         </action>
         <!-- Submit results end -->

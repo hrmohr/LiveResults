@@ -106,7 +106,7 @@
         <property name="parser" ref="wcaParser" />
     </bean>
 
-    <bean id="submitResultsAction" class="dk.cubing.liveresults.action.admin.ScoresheetAction">
+    <bean id="exportResultsAction" class="dk.cubing.liveresults.action.admin.ScoresheetAction">
         <property name="competitionService" ref="competitionService" />
         <property name="spreadSheetFilename" value="/xls/results.xls" />
     </bean>

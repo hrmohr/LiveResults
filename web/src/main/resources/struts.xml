@@ -249,8 +249,8 @@
 			</result>
 			<result name="success" type="dispatcher">/WEB-INF/pages/admin/resultsExported.jsp
 			</result>
-            <result name="pdf" type="stream">
-				<param name="contentType">application/pdf</param>
+            <result name="spreadsheet" type="stream">
+				<param name="contentType">application/vnd.ms-excel</param>
 				<param name="contentLength">${contentLength}</param>
 				<param name="inputName">inputStream</param>
 				<param name="contentDisposition">${contentDisposition}</param>

@@ -938,7 +938,7 @@ public class ScoresheetAction extends FrontendAction {
                     workBook.write(out);
                     out.close();
 
-                    return "pdf";
+                    return "spreadsheet";
                 }
             } catch (InvalidFormatException e) {
                 log.error("Spreadsheet template are using an unsupported format.", e);

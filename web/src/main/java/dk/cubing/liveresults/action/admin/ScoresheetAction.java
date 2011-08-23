@@ -39,6 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import dk.cubing.liveresults.model.*;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
@@ -61,10 +62,6 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.opensymphony.xwork2.Action;
 
 import dk.cubing.liveresults.action.FrontendAction;
-import dk.cubing.liveresults.model.Competition;
-import dk.cubing.liveresults.model.Competitor;
-import dk.cubing.liveresults.model.Event;
-import dk.cubing.liveresults.model.RegisteredEvents;
 import dk.cubing.liveresults.service.CompetitionService;
 import dk.cubing.liveresults.utilities.CountryUtil;
 import dk.cubing.liveresults.utilities.CsvConverter;
@@ -1018,6 +1015,38 @@ public class ScoresheetAction extends FrontendAction {
 			}
 		}
 	}
+
+    /**
+     *
+     * @param workBook
+     * @param sheet
+     * @param event
+     */
+    private void generateCompetitorResultsRows(Workbook workBook, Sheet sheet, Event event) {
+        int line = 4;
+        for (Result result : event.getResults()) {
+            // name
+			Cell name = getCell(sheet, line, 1, Cell.CELL_TYPE_STRING);
+			name.setCellValue(result.getFirstname() + " " + result.getSurname());
+
+			// country
+			Cell country = getCell(sheet, line, 2, Cell.CELL_TYPE_STRING);
+			country.setCellValue(countryUtil.getCountryByCode(result.getCountry()));
+
+            // wca id
+			String wcaId = result.getWcaId();
+			Cell wcaIdCell = null;
+			if (wcaId == null || "".equals(wcaId)) {
+				wcaIdCell = getCell(sheet, line, 3, Cell.CELL_TYPE_BLANK);
+			} else {
+				wcaIdCell = getCell(sheet, line, 3, Cell.CELL_TYPE_STRING);
+				wcaIdCell.setCellValue(wcaId);
+			}
+
+            // loop
+            line++;
+        }
+    }
 	
 	/**
 	 * @param workBook
@@ -1095,9 +1124,16 @@ public class ScoresheetAction extends FrontendAction {
 	private void createResultSheetFromTemplate(Workbook workBook,
 			Sheet template, Competition competition, Event event, String round, boolean includeCompetitors) {
 		Sheet resultSheet = workBook.cloneSheet(workBook.getSheetIndex(template));
-		String sheetName = event.getName() + " - " + getRoundTypesMap().get(round);
-		log.debug("Building result sheet: {}", sheetName);
-		String eventNameFormatted = getText("admin.scoresheet.eventname." + event.getName().toLowerCase()) + " - " + getRoundTypesMap().get(round);
+        String sheetName = null;
+        String eventNameFormatted = null;
+        if (round == null) {
+            sheetName = event.getName();
+            eventNameFormatted = event.getName();
+        } else {
+            sheetName = event.getName() + " - " + getRoundTypesMap().get(round);
+            eventNameFormatted = getText("admin.scoresheet.eventname." + event.getName().toLowerCase()) + " - " + getRoundTypesMap().get(round);
+        }
+        log.debug("Building result sheet: {}", sheetName);
 		workBook.setSheetName(workBook.getSheetIndex(resultSheet), sheetName);
 		workBook.setSheetOrder(sheetName, 1); // first sheet is the registration sheet, let's put results directly after that
 		Cell eventName = getCell(resultSheet, 0, 0, Cell.CELL_TYPE_STRING);
@@ -1315,12 +1351,21 @@ public class ScoresheetAction extends FrontendAction {
 		
 		// fill sheet with competitors for this event
 		if (includeCompetitors) {
-			try {
-				generateCompetitorRows(workBook, resultSheet, competition.getCompetitorsByEvent(event), 4);
-			} catch (Exception e) {
-				log.error("[{}] " + e.getLocalizedMessage(), e);
-				throw new RuntimeException("Could not include competitors in this sheet.", e);
-			}
+            if (round == null) {
+                try {
+                    generateCompetitorResultsRows(workBook, resultSheet, event);
+                } catch (Exception e) {
+                    log.error("[{}] " + e.getLocalizedMessage(), e);
+                    throw new RuntimeException("Could not include competitors and results in this sheet.", e);
+                }
+            } else {
+                try {
+                    generateCompetitorRows(workBook, resultSheet, competition.getCompetitorsByEvent(event), 4);
+                } catch (Exception e) {
+                    log.error("[{}] " + e.getLocalizedMessage(), e);
+                    throw new RuntimeException("Could not include competitors in this sheet.", e);
+                }
+            }
 		}
 	}
 	

@@ -39,8 +39,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import dk.cubing.liveresults.model.*;
-import dk.cubing.liveresults.utilities.ResultTimeFormat;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
@@ -63,9 +61,16 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.opensymphony.xwork2.Action;
 
 import dk.cubing.liveresults.action.FrontendAction;
+import dk.cubing.liveresults.model.Competition;
+import dk.cubing.liveresults.model.Competitor;
+import dk.cubing.liveresults.model.Event;
+import dk.cubing.liveresults.model.RegisteredEvents;
+import dk.cubing.liveresults.model.Result;
 import dk.cubing.liveresults.service.CompetitionService;
+import dk.cubing.liveresults.service.EventService;
 import dk.cubing.liveresults.utilities.CountryUtil;
 import dk.cubing.liveresults.utilities.CsvConverter;
+import dk.cubing.liveresults.utilities.ResultTimeFormat;
 import dk.cubing.liveresults.utilities.StringUtil;
 
 @Secured( { "ROLE_USER" })
@@ -76,6 +81,7 @@ public class ScoresheetAction extends FrontendAction {
 	private static final Logger log = LoggerFactory.getLogger(ScoresheetAction.class);
 	
 	private CompetitionService competitionService;
+	private EventService eventService;
 	private final CountryUtil countryUtil;
 	private final SimpleDateFormat birthdayFormat;
     private final CsvConverter csvConverter;
@@ -151,6 +157,20 @@ public class ScoresheetAction extends FrontendAction {
 	 */
 	public CompetitionService getCompetitionService() {
 		return competitionService;
+	}
+
+	/**
+	 * @return the eventService
+	 */
+	public EventService getEventService() {
+		return eventService;
+	}
+
+	/**
+	 * @param eventService the eventService to set
+	 */
+	public void setEventService(EventService eventService) {
+		this.eventService = eventService;
 	}
 
 	/**
@@ -1054,39 +1074,141 @@ public class ScoresheetAction extends FrontendAction {
      */
     private void generateCompetitorResultsRows(Workbook workBook, Sheet sheet, Event event) {
         int line = 4;
-        for (Result result : event.getResults()) {
-            // name
-			Cell name = getCell(sheet, line, 1, Cell.CELL_TYPE_STRING);
-			name.setCellValue(result.getFirstname() + " " + result.getSurname());
-
-			// country
-			Cell country = getCell(sheet, line, 2, Cell.CELL_TYPE_STRING);
-			country.setCellValue(countryUtil.getCountryByCode(result.getCountry()));
-
-            // wca id
-			String wcaId = result.getWcaId();
-			Cell wcaIdCell = null;
-			if (wcaId == null || "".equals(wcaId)) {
-				wcaIdCell = getCell(sheet, line, 3, Cell.CELL_TYPE_BLANK);
-			} else {
-				wcaIdCell = getCell(sheet, line, 3, Cell.CELL_TYPE_STRING);
-				wcaIdCell.setCellValue(wcaId);
-			}
-
-            Cell cell;
-            if (Event.Format.AVERAGE.getValue().equals(event.getFormat())) {
-                cell = getCell(sheet, line, 4, Cell.CELL_TYPE_NUMERIC);
-                resultTimeFormat.format(result.getResult1(), event.getTimeFormat());
-            } else if (Event.Format.MEAN.getValue().equals(event.getFormat())) {
-            } else if (Event.Format.BEST_OF_1.getValue().equals(event.getFormat())) {
-            } else if (Event.Format.BEST_OF_2.getValue().equals(event.getFormat())) {
-            } else if (Event.Format.BEST_OF_3.getValue().equals(event.getFormat())) {
-            }
+        for (Result result : getEventService().getResults(event, 1, 0)) {
+        	// team events
+        	if (Event.TimeFormat.TEAM.getValue().equals(event.getTimeFormat())) {
+        		// TODO: implement this
+        		if (Event.Format.BEST_OF_1.getValue().equals(event.getFormat())) {
+                } else if (Event.Format.BEST_OF_2.getValue().equals(event.getFormat())) {
+                } else if (Event.Format.BEST_OF_3.getValue().equals(event.getFormat())) {
+                }
+        		
+        	// normal events
+        	} else {
+        		
+	            // name
+				Cell name = getCell(sheet, line, 1, Cell.CELL_TYPE_STRING);
+				name.setCellValue(result.getFirstname() + " " + result.getSurname());
+	
+				// country
+				Cell country = getCell(sheet, line, 2, Cell.CELL_TYPE_STRING);
+				country.setCellValue(countryUtil.getCountryByCode(result.getCountry()));
+	
+	            // wca id
+				String wcaId = result.getWcaId();
+				Cell wcaIdCell = null;
+				if (wcaId == null || "".equals(wcaId)) {
+					wcaIdCell = getCell(sheet, line, 3, Cell.CELL_TYPE_BLANK);
+				} else {
+					wcaIdCell = getCell(sheet, line, 3, Cell.CELL_TYPE_STRING);
+					wcaIdCell.setCellValue(wcaId);
+				}
+	
+				// results
+				if (Event.TimeFormat.MULTI_BLD.getValue().equals(event.getTimeFormat())) {
+					Cell cell;
+	            	if (Event.Format.BEST_OF_1.getValue().equals(event.getFormat())) {
+	            		cell = getCell(sheet, line, 4, Cell.CELL_TYPE_NUMERIC);
+	    				cell.setCellValue(resultTimeFormat.formatMultiBLDTried(result.getResult1()));
+	    				cell = getCell(sheet, line, 5, Cell.CELL_TYPE_NUMERIC);
+	    				cell.setCellValue(resultTimeFormat.formatMultiBLDSolved(result.getResult1()));
+	    				cell = getCell(sheet, line, 6, Cell.CELL_TYPE_NUMERIC);
+	    				cell.setCellValue(resultTimeFormat.formatMultiBLDSeconds(result.getResult1()));
+	    				setCellValue(sheet, event, line, 7, result.getRegionalSingleRecord());
+	            	} else if (Event.Format.BEST_OF_2.getValue().equals(event.getFormat())) {
+	            		cell = getCell(sheet, line, 4, Cell.CELL_TYPE_NUMERIC);
+	    				cell.setCellValue(resultTimeFormat.formatMultiBLDTried(result.getResult1()));
+	    				cell = getCell(sheet, line, 5, Cell.CELL_TYPE_NUMERIC);
+	    				cell.setCellValue(resultTimeFormat.formatMultiBLDSolved(result.getResult1()));
+	    				cell = getCell(sheet, line, 6, Cell.CELL_TYPE_NUMERIC);
+	    				cell.setCellValue(resultTimeFormat.formatMultiBLDSeconds(result.getResult1()));
+	    				
+	    				if (Result.Penalty.DNF.getValue() == result.getResult2() || Result.Penalty.DNS.getValue() == result.getResult2()) {
+	    					cell = getCell(sheet, line, 8, Cell.CELL_TYPE_STRING);
+		    				cell.setCellValue(resultTimeFormat.formatNumber(result.getResult2()));
+	    				} else {
+		    				cell = getCell(sheet, line, 8, Cell.CELL_TYPE_NUMERIC);
+		    				cell.setCellValue(resultTimeFormat.formatMultiBLDTried(result.getResult2()));
+	    				}
+	    				cell = getCell(sheet, line, 9, Cell.CELL_TYPE_NUMERIC);
+	    				cell.setCellValue(resultTimeFormat.formatMultiBLDSolved(result.getResult2()));
+	    				cell = getCell(sheet, line, 10, Cell.CELL_TYPE_NUMERIC);
+	    				cell.setCellValue(resultTimeFormat.formatMultiBLDSeconds(result.getResult2()));
+	    				setCellValue(sheet, event, line, 12, result.getRegionalSingleRecord());
+	            	}
+	            } else if (Event.Format.AVERAGE.getValue().equals(event.getFormat())) {
+	            	setCellValue(sheet, event, line, 4, result.getResult1());
+	            	setCellValue(sheet, event, line, 5, result.getResult2());
+	            	setCellValue(sheet, event, line, 6, result.getResult3());
+	            	setCellValue(sheet, event, line, 7, result.getResult4());
+	            	setCellValue(sheet, event, line, 8, result.getResult5());
+	            	setCellValue(sheet, event, line, 10, result.getRegionalSingleRecord());
+	            	setCellValue(sheet, event, line, 13, result.getRegionalAverageRecord());
+	            } else if (Event.Format.MEAN.getValue().equals(event.getFormat())) {
+	            	setCellValue(sheet, event, line, 4, result.getResult1());
+	            	setCellValue(sheet, event, line, 5, result.getResult2());
+	            	setCellValue(sheet, event, line, 6, result.getResult3());
+	            	setCellValue(sheet, event, line, 8, result.getRegionalSingleRecord());
+	            	setCellValue(sheet, event, line, 11, result.getRegionalAverageRecord());
+	            } else if (Event.Format.BEST_OF_1.getValue().equals(event.getFormat())) {
+	            	setCellValue(sheet, event, line, 4, result.getResult1());
+	            	setCellValue(sheet, event, line, 6, result.getRegionalSingleRecord());
+	            } else if (Event.Format.BEST_OF_2.getValue().equals(event.getFormat())) {
+	            	setCellValue(sheet, event, line, 4, result.getResult1());
+	            	setCellValue(sheet, event, line, 5, result.getResult2());
+	            	setCellValue(sheet, event, line, 7, result.getRegionalSingleRecord());
+	            } else if (Event.Format.BEST_OF_3.getValue().equals(event.getFormat())) {
+	            	setCellValue(sheet, event, line, 4, result.getResult1());
+	            	setCellValue(sheet, event, line, 5, result.getResult2());
+	            	setCellValue(sheet, event, line, 6, result.getResult3());
+	            	setCellValue(sheet, event, line, 8, result.getRegionalSingleRecord());
+	            }
+        	}
 
             // loop
             line++;
         }
     }
+
+	/**
+	 * @param sheet
+	 * @param event
+	 * @param row
+	 * @param column
+	 * @param result
+	 */
+	private void setCellValue(Sheet sheet, Event event, int row, int column, int result) {
+		Cell cell;
+		if (Result.Penalty.DNF.getValue() == result || Result.Penalty.DNS.getValue() == result) {
+			setCellValue(sheet, event, row, column, resultTimeFormat.formatNumber(result));
+		} else if (result > 0) {
+			if (Event.TimeFormat.SECONDS.getValue().equals(event.getTimeFormat())) {
+				cell = getCell(sheet, row, column, Cell.CELL_TYPE_NUMERIC);
+				double cellValue = result / 100F;
+				cell.setCellValue(cellValue);
+			} else if (Event.TimeFormat.MINUTES.getValue().equals(event.getTimeFormat())) {
+				cell = getCell(sheet, row, column, Cell.CELL_TYPE_NUMERIC);
+				Date cellValue = resultTimeFormat.formatDoubleToDate(result);
+				cell.setCellValue(cellValue);
+			} else if (Event.TimeFormat.NUMBER.getValue().equals(event.getTimeFormat())) {
+				cell = getCell(sheet, row, column, Cell.CELL_TYPE_NUMERIC);
+				cell.setCellValue(result);
+			}
+		}
+	}
+	
+	/**
+	 * @param sheet
+	 * @param event
+	 * @param row
+	 * @param column
+	 * @param result
+	 */
+	private void setCellValue(Sheet sheet, Event event, int row, int column, String result) {
+		Cell cell;
+		cell = getCell(sheet, row, column, Cell.CELL_TYPE_STRING);
+		cell.setCellValue(result);
+	}
 	
 	/**
 	 * @param workBook

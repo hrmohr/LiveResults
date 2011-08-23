@@ -108,6 +108,7 @@
 
     <bean id="exportResultsAction" class="dk.cubing.liveresults.action.admin.ScoresheetAction">
         <property name="competitionService" ref="competitionService" />
+        <property name="eventService" ref="eventService" />
         <property name="spreadSheetFilename" value="/xls/results.xls" />
     </bean>
 	<!-- Admin action setup end -->

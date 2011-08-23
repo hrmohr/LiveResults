@@ -1108,33 +1108,43 @@ public class ScoresheetAction extends FrontendAction {
 				if (Event.TimeFormat.MULTI_BLD.getValue().equals(event.getTimeFormat())) {
 					Cell cell;
 	            	if (Event.Format.BEST_OF_1.getValue().equals(event.getFormat())) {
-	            		cell = getCell(sheet, line, 4, Cell.CELL_TYPE_NUMERIC);
-	    				cell.setCellValue(resultTimeFormat.formatMultiBLDTried(result.getResult1()));
-	    				cell = getCell(sheet, line, 5, Cell.CELL_TYPE_NUMERIC);
-	    				cell.setCellValue(resultTimeFormat.formatMultiBLDSolved(result.getResult1()));
-	    				cell = getCell(sheet, line, 6, Cell.CELL_TYPE_NUMERIC);
-	    				cell.setCellValue(resultTimeFormat.formatMultiBLDSeconds(result.getResult1()));
-	    				setCellValue(sheet, event, line, 7, result.getRegionalSingleRecord());
+                        if (Result.Penalty.DNF.getValue() == result.getResult1() || Result.Penalty.DNS.getValue() == result.getResult1()) {
+                            cell = getCell(sheet, line, 6, Cell.CELL_TYPE_STRING);
+                            cell.setCellValue(resultTimeFormat.formatNumber(result.getResult1()));
+                        } else {
+                            cell = getCell(sheet, line, 4, Cell.CELL_TYPE_NUMERIC);
+                            cell.setCellValue(resultTimeFormat.formatMultiBLDTried(result.getResult1()));
+                            cell = getCell(sheet, line, 5, Cell.CELL_TYPE_NUMERIC);
+                            cell.setCellValue(resultTimeFormat.formatMultiBLDSolved(result.getResult1()));
+                            cell = getCell(sheet, line, 6, Cell.CELL_TYPE_NUMERIC);
+                            cell.setCellValue(resultTimeFormat.formatMultiBLDSeconds(result.getResult1()));
+                            setCellValue(sheet, event, line, 7, result.getRegionalSingleRecord());
+                        }
 	            	} else if (Event.Format.BEST_OF_2.getValue().equals(event.getFormat())) {
-	            		cell = getCell(sheet, line, 4, Cell.CELL_TYPE_NUMERIC);
-	    				cell.setCellValue(resultTimeFormat.formatMultiBLDTried(result.getResult1()));
-	    				cell = getCell(sheet, line, 5, Cell.CELL_TYPE_NUMERIC);
-	    				cell.setCellValue(resultTimeFormat.formatMultiBLDSolved(result.getResult1()));
-	    				cell = getCell(sheet, line, 6, Cell.CELL_TYPE_NUMERIC);
-	    				cell.setCellValue(resultTimeFormat.formatMultiBLDSeconds(result.getResult1()));
-	    				
-	    				if (Result.Penalty.DNF.getValue() == result.getResult2() || Result.Penalty.DNS.getValue() == result.getResult2()) {
-	    					cell = getCell(sheet, line, 8, Cell.CELL_TYPE_STRING);
-		    				cell.setCellValue(resultTimeFormat.formatNumber(result.getResult2()));
-	    				} else {
-		    				cell = getCell(sheet, line, 8, Cell.CELL_TYPE_NUMERIC);
-		    				cell.setCellValue(resultTimeFormat.formatMultiBLDTried(result.getResult2()));
-	    				}
-	    				cell = getCell(sheet, line, 9, Cell.CELL_TYPE_NUMERIC);
-	    				cell.setCellValue(resultTimeFormat.formatMultiBLDSolved(result.getResult2()));
-	    				cell = getCell(sheet, line, 10, Cell.CELL_TYPE_NUMERIC);
-	    				cell.setCellValue(resultTimeFormat.formatMultiBLDSeconds(result.getResult2()));
-	    				setCellValue(sheet, event, line, 12, result.getRegionalSingleRecord());
+                        if (Result.Penalty.DNF.getValue() == result.getResult1() || Result.Penalty.DNS.getValue() == result.getResult1()) {
+                            cell = getCell(sheet, line, 6, Cell.CELL_TYPE_STRING);
+                            cell.setCellValue(resultTimeFormat.formatNumber(result.getResult1()));
+                        } else {
+                            cell = getCell(sheet, line, 4, Cell.CELL_TYPE_NUMERIC);
+                            cell.setCellValue(resultTimeFormat.formatMultiBLDTried(result.getResult1()));
+                            cell = getCell(sheet, line, 5, Cell.CELL_TYPE_NUMERIC);
+                            cell.setCellValue(resultTimeFormat.formatMultiBLDSolved(result.getResult1()));
+                            cell = getCell(sheet, line, 6, Cell.CELL_TYPE_NUMERIC);
+                            cell.setCellValue(resultTimeFormat.formatMultiBLDSeconds(result.getResult1()));
+
+                            if (Result.Penalty.DNF.getValue() == result.getResult2() || Result.Penalty.DNS.getValue() == result.getResult2()) {
+                                cell = getCell(sheet, line, 8, Cell.CELL_TYPE_STRING);
+                                cell.setCellValue(resultTimeFormat.formatNumber(result.getResult2()));
+                            } else {
+                                cell = getCell(sheet, line, 8, Cell.CELL_TYPE_NUMERIC);
+                                cell.setCellValue(resultTimeFormat.formatMultiBLDTried(result.getResult2()));
+                            }
+                            cell = getCell(sheet, line, 9, Cell.CELL_TYPE_NUMERIC);
+                            cell.setCellValue(resultTimeFormat.formatMultiBLDSolved(result.getResult2()));
+                            cell = getCell(sheet, line, 10, Cell.CELL_TYPE_NUMERIC);
+                            cell.setCellValue(resultTimeFormat.formatMultiBLDSeconds(result.getResult2()));
+                            setCellValue(sheet, event, line, 12, result.getRegionalSingleRecord());
+                        }
 	            	}
 	            } else if (Event.Format.AVERAGE.getValue().equals(event.getFormat())) {
 	            	setCellValue(sheet, event, line, 4, result.getResult1());

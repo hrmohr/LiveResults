@@ -850,7 +850,7 @@ public class ScoresheetAction extends FrontendAction {
     /**
      * @return
      */
-    public String sendResults() {
+    public String exportResults() {
         if (competitionId != null) {
 			Competition competitionTemplate = getCompetitionService().find(competitionId);
 			if (competitionTemplate == null) {

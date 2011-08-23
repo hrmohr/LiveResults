@@ -29,7 +29,7 @@ import javax.persistence.Transient;
 @NamedNativeQueries(value = {
 	@NamedNativeQuery(
 			name = "findAverageResultsByEvent",
-			query = "SELECT * FROM wca_results WHERE eventId = :eventId ORDER BY SIGN(average) DESC, average ASC, best ASC, surname ASC",
+			query = "(SELECT * FROM wca_results WHERE eventId = :eventId AND average != 0 ORDER BY average ASC, best ASC, surname ASC) UNION (SELECT * FROM wca_results WHERE eventId = :eventId AND average = 0 ORDER BY best ASC, surname ASC)",
 			resultClass = dk.cubing.liveresults.model.Result.class
 	),
 	@NamedNativeQuery(
@@ -39,7 +39,7 @@ import javax.persistence.Transient;
 	),
 	@NamedNativeQuery(
 			name = "findAverageResultsByEventAndCountry",
-			query = "SELECT * FROM wca_results WHERE eventId = :eventId AND country = :country ORDER BY SIGN(average) DESC, average ASC, best ASC, surname ASC",
+			query = "(SELECT * FROM wca_results WHERE eventId = :eventId AND average != 0 AND country = :country ORDER BY average ASC, best ASC, surname ASC) UNION (SELECT * FROM wca_results WHERE eventId = :eventId AND average = 0 AND country = :country ORDER BY best ASC, surname ASC)",
 			resultClass = dk.cubing.liveresults.model.Result.class
 	),
 	@NamedNativeQuery(

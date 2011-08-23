@@ -185,8 +185,8 @@ public class ResultTimeFormat {
 		if (result > 0) {
 			String resultStr = Integer.toString(result);
 			int failed = Integer.parseInt(resultStr.substring(resultStr.length() - 2));
-			int time = Integer.parseInt(Integer.toString(result).substring(2, 7));
-			int solved = 99 - Integer.parseInt(Integer.toString(result).substring(0, 2)) + failed;
+			int time = Integer.parseInt(resultStr.substring(2, 7));
+			int solved = 99 - Integer.parseInt(resultStr.substring(0, 2)) + failed;
             int tried = solved + failed;
 			int minutes = (int)Math.floor(time / 60);
 			int seconds = time - (minutes * 60);
@@ -211,5 +211,38 @@ public class ResultTimeFormat {
 				return Result.Penalty.DNF.toString();
 			}
 		}
+	}
+	
+	/**
+	 * @param result
+	 * @return
+	 */
+	public int formatMultiBLDTried(int result) {
+		String resultStr = Integer.toString(result);
+		int failed = Integer.parseInt(resultStr.substring(resultStr.length() - 2));
+		int solved = 99 - Integer.parseInt(resultStr.substring(0, 2)) + failed;
+        int tried = solved + failed;
+		return tried;
+	}
+	
+	/**
+	 * @param result
+	 * @return
+	 */
+	public int formatMultiBLDSolved(int result) {
+		String resultStr = Integer.toString(result);
+		int failed = Integer.parseInt(resultStr.substring(resultStr.length() - 2));
+		int solved = 99 - Integer.parseInt(resultStr.substring(0, 2)) + failed;
+		return solved;
+	}
+	
+	/**
+	 * @param result
+	 * @return
+	 */
+	public int formatMultiBLDSeconds(int result) {
+		String resultStr = Integer.toString(result);
+		int time = Integer.parseInt(resultStr.substring(2, 7));
+		return time;
 	}
 }

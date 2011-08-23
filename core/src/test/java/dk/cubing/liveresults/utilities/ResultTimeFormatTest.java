@@ -71,6 +71,9 @@ public class ResultTimeFormatTest {
 		assertEquals(Result.Penalty.DNF.toString(), resultTimeFormat.format(Result.Penalty.DNF.getValue(), Event.TimeFormat.MULTI_BLD.getValue()));
 		assertEquals(Result.Penalty.DNS.toString(), resultTimeFormat.format(Result.Penalty.DNS.getValue(), Event.TimeFormat.MULTI_BLD.getValue()));
 		assertEquals("3/4 25:37", resultTimeFormat.format(970153701, Event.TimeFormat.MULTI_BLD.getValue()));
+		assertEquals(4, resultTimeFormat.formatMultiBLDTried(970153701));
+		assertEquals(3, resultTimeFormat.formatMultiBLDSolved(970153701));
+		assertEquals(25*60+37, resultTimeFormat.formatMultiBLDSeconds(970153701));
 	}
 	
 	/**

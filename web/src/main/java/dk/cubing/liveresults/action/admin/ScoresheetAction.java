@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import dk.cubing.liveresults.model.*;
+import dk.cubing.liveresults.utilities.ResultTimeFormat;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
@@ -78,6 +79,7 @@ public class ScoresheetAction extends FrontendAction {
 	private final CountryUtil countryUtil;
 	private final SimpleDateFormat birthdayFormat;
     private final CsvConverter csvConverter;
+    private final ResultTimeFormat resultTimeFormat;
 	
 	private final String SHEET_TYPE_REGISTRATION = "Registration";
 	private final String SHEET_TYPE_AVERAGE5S = "average5s";
@@ -134,6 +136,7 @@ public class ScoresheetAction extends FrontendAction {
 		birthdayFormat = new SimpleDateFormat("yyyy-MM-dd");
 		birthdayFormat.setLenient(false);
         csvConverter = new CsvConverter();
+        resultTimeFormat = new ResultTimeFormat();
 	}
 	
 	/**
@@ -922,9 +925,9 @@ public class ScoresheetAction extends FrontendAction {
                             getCompetition().getName(),
                             getCompetition().getOrganiser()
                     }));
-                    //email.addTo(getText("admin.submitresults.resultsteamEmail"), getText("admin.submitresults.resultsteam"));
-                    email.addTo("hr.mohr@gmail.com", "Mads Mohr Christensen");
                     email.setFrom(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
+                    email.addTo("hr.mohr@gmail.com", "Mads Mohr Christensen");
+                    //email.addTo(getText("admin.submitresults.resultsteamEmail"), getText("admin.submitresults.resultsteam"));
                     //email.addCc(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
                     //email.addCc(getCompetition().getWcaDelegateEmail(), getCompetition().getWcaDelegate());
                     email.attach(attachment);
@@ -1070,6 +1073,16 @@ public class ScoresheetAction extends FrontendAction {
 				wcaIdCell.setCellValue(wcaId);
 			}
 
+            Cell cell;
+            if (Event.Format.AVERAGE.getValue().equals(event.getFormat())) {
+                cell = getCell(sheet, line, 4, Cell.CELL_TYPE_NUMERIC);
+                resultTimeFormat.format(result.getResult1(), event.getTimeFormat());
+            } else if (Event.Format.MEAN.getValue().equals(event.getFormat())) {
+            } else if (Event.Format.BEST_OF_1.getValue().equals(event.getFormat())) {
+            } else if (Event.Format.BEST_OF_2.getValue().equals(event.getFormat())) {
+            } else if (Event.Format.BEST_OF_3.getValue().equals(event.getFormat())) {
+            }
+
             // loop
             line++;
         }
@@ -1154,7 +1167,7 @@ public class ScoresheetAction extends FrontendAction {
         String sheetName = null;
         String eventNameFormatted = null;
         if (round == null) {
-            sheetName = event.getName();
+            sheetName = event.getName(); // TODO: format to short sheetname
             eventNameFormatted = event.getName();
         } else {
             sheetName = event.getName() + " - " + getRoundTypesMap().get(round);
@@ -1183,7 +1196,7 @@ public class ScoresheetAction extends FrontendAction {
 		}
 
 		// adjust formulas
-		int numberOfCompetitors = competition.getCompetitors().size();
+		int numberOfCompetitors = (round == null) ? event.getResults().size() : competition.getCompetitors().size();
 		for (int i=0; i<numberOfCompetitors; i++) {
 			for (int j=0; j<numberOfColumns; j++) {
 				if (SHEET_TYPE_AVERAGE5S.equals(template.getSheetName())) {

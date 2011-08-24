@@ -247,8 +247,7 @@ public class DiplomasAction extends FrontendAction {
 	}
 
 	/**
-	 * @param competitionId 
-	 * @param eventId 
+	 * @param competition
 	 * @return
 	 */
 	private DOMSource generateXML(Competition competition) {

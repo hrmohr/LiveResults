@@ -9,7 +9,7 @@
     </head>
     <body>
         <s:include value="/WEB-INF/decorators/adminMenu.jsp">
-            <s:param name="selectedMenu">Submit results</s:param>
+            <s:param name="selectedMenu">Export</s:param>
         </s:include>
 
         <h1><s:text name="admin.export.title" /></h1>

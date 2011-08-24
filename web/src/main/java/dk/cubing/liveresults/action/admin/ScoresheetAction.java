@@ -535,6 +535,7 @@ public class ScoresheetAction extends FrontendAction {
 	@Override
 	public String list() {
 		setCompetitions(getCompetitionService().list(page, size));
+        setSubmitResultsToWCA(false);
 		return Action.SUCCESS;
 	}
 	
@@ -941,15 +942,14 @@ public class ScoresheetAction extends FrontendAction {
                     }
                     email.setSSL("true".equals(getText("email.ssl")));
                     email.setSubject("Results from " + getCompetition().getName());
-                    email.setMsg(getText("admin.submitresults.message", new String[]{
+                    email.setMsg(getText("admin.export.message", new String[]{
                             getCompetition().getName(),
                             getCompetition().getOrganiser()
                     }));
                     email.setFrom(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
-                    email.addTo("hr.mohr@gmail.com", "Mads Mohr Christensen");
-                    //email.addTo(getText("admin.submitresults.resultsteamEmail"), getText("admin.submitresults.resultsteam"));
-                    //email.addCc(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
-                    //email.addCc(getCompetition().getWcaDelegateEmail(), getCompetition().getWcaDelegate());
+                    email.addTo(getText("admin.export.resultsteamEmail"), getText("admin.export.resultsteam"));
+                    email.addCc(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
+                    email.addCc(getCompetition().getWcaDelegateEmail(), getCompetition().getWcaDelegate());
                     email.attach(attachment);
                     email.send();
 

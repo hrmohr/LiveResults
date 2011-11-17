@@ -17,11 +17,6 @@
 	            <c:when test="${param.selectedMenu == 'Competitions'}"><td><div class="item"><s:a href="%{competitionsUrl}" id="activePage"><s:text name="admin.menu.competitions" /></s:a></div></td></c:when>
 	            <c:otherwise><td><div class="item"><s:a href="%{competitionsUrl}"><s:text name="admin.menu.competitions" /></s:a></div></td></c:otherwise>
 	        </c:choose>
-	        <s:url id="scramblesUrl" action="scrambles" namespace="/admin" />
-	        <c:choose>
-	            <c:when test="${param.selectedMenu == 'Scrambles'}"><td><div class="item"><s:a href="%{scramblesUrl}" id="activePage"><s:text name="admin.menu.scrambles" /></s:a></div></td></c:when>
-	            <c:otherwise><td><div class="item"><s:a href="%{scramblesUrl}"><s:text name="admin.menu.scrambles" /></s:a></div></td></c:otherwise>
-	        </c:choose>
         </sec:authorize>
         <s:url id="emailUrl" action="email" namespace="/admin" />
         <c:choose>

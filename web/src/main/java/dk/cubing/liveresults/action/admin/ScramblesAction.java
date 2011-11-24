@@ -125,6 +125,10 @@ public class ScramblesAction extends FrontendAction {
 	}
 	
 	public void initMap() {
+        // supported file encodings
+        csvFileEncodings.add("ISO-8859-1");
+        csvFileEncodings.add("UTF-8");
+
 		// average of 5 with a seconds format
 		eventNamesMap.put("333", setupEvent("3x3", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
 		eventNamesMap.put("222", setupEvent("2x2", Event.Format.AVERAGE.getValue(), Event.TimeFormat.SECONDS.getValue()));
@@ -581,6 +585,7 @@ public class ScramblesAction extends FrontendAction {
                 } else {
                     reader = new CSVReader(new InputStreamReader(new FileInputStream(csv), getCsvFileEncoding()), ',');
                 }
+                setCsvFileEncoding("ISO-8859-1");
 				List<String[]> csvLines = reader.readAll();
 				// first row which includes event names
 				List<Event> events = parseEvents(csvLines.remove(0));

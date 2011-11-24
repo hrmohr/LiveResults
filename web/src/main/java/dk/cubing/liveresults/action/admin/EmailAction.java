@@ -66,6 +66,9 @@ public class EmailAction extends FrontendAction {
 		this.acceptedCompetitors = new ArrayList<String>();
 		this.pendingCompetitors = new ArrayList<String>();
         this.csvConverter = new CsvConverter();
+        // supported file encodings
+        csvFileEncodings.add("ISO-8859-1");
+        csvFileEncodings.add("UTF-8");
 	}
 	
 	/**
@@ -315,6 +318,7 @@ public class EmailAction extends FrontendAction {
                 } else {
                     reader = new CSVReader(new InputStreamReader(new FileInputStream(csv), getCsvFileEncoding()), ',');
                 }
+                setCsvFileEncoding("ISO-8859-1");
 				List<String[]> csvLines = reader.readAll();
 				csvLines.remove(0); // first line contains column definition
 				for (String[] line : csvLines) {

@@ -576,6 +576,7 @@ public class ScoresheetAction extends FrontendAction {
                 } else {
                     reader = new CSVReader(new InputStreamReader(new FileInputStream(csv), getCsvFileEncoding()), ',');
                 }
+                setCsvFileEncoding("ISO-8859-1");
                 List<String[]> csvLines = reader.readAll();
 				// first row which includes event names
 				List<Event> events = parseEvents(csvLines.remove(0));
@@ -609,8 +610,6 @@ public class ScoresheetAction extends FrontendAction {
 				});
 				competition.setCompetitors(competitors);
 				setCompetition(competition);
-
-                setCsvFileEncoding("ISO-8859-1");
 
 				return Action.SUCCESS;
 			} catch (Exception e) {

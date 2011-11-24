@@ -16,12 +16,11 @@
  */
 package dk.cubing.liveresults.action.admin;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.cubing.liveresults.utilities.CsvConverter;
 import org.apache.commons.mail.SimpleEmail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,25 +42,30 @@ public class EmailAction extends FrontendAction {
 	private static final Logger log = LoggerFactory.getLogger(EmailAction.class);
 	
 	private CompetitionService competitionService;
+    private final CsvConverter csvConverter;
 	
 	private File csv;
 	private String csvContentType;
 	private String csvFileName;
+    private boolean csvConvert = false;
+    private List<String> csvFileEncodings = new ArrayList<String>();
+    private String csvFileEncoding = "ISO-8859-1";
 	
 	private List<Competition> competitions;
 	private String competitionId;
 	private Competition competition;
 	
-	private List<String> acceptedCompetitiors;
-	private List<String> pendingCompetitiors;
+	private List<String> acceptedCompetitors;
+	private List<String> pendingCompetitors;
 	private boolean sendToAccepted = true;
 	private boolean sendToPending = false;
 	private String subject;
 	private String body;
 	
 	public EmailAction() {
-		this.acceptedCompetitiors = new ArrayList<String>();
-		this.pendingCompetitiors = new ArrayList<String>();
+		this.acceptedCompetitors = new ArrayList<String>();
+		this.pendingCompetitors = new ArrayList<String>();
+        this.csvConverter = new CsvConverter();
 	}
 	
 	/**
@@ -120,6 +124,41 @@ public class EmailAction extends FrontendAction {
 		this.csvFileName = csvFileName;
 	}
 
+    /**
+     * @return
+     */
+    public String getCsvFileEncoding() {
+        return csvFileEncoding;
+    }
+
+    /**
+     * @param csvFileEncoding
+     */
+    public void setCsvFileEncoding(String csvFileEncoding) {
+        this.csvFileEncoding = csvFileEncoding;
+    }
+
+    /**
+     * @return
+     */
+    public List<String> getCsvFileEncodings() {
+        return csvFileEncodings;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isCsvConvert() {
+        return csvConvert;
+    }
+
+    /**
+     * @param csvConvert
+     */
+    public void setCsvConvert(boolean csvConvert) {
+        this.csvConvert = csvConvert;
+    }
+
 	/**
 	 * @param competitions the competitions to set
 	 */
@@ -164,31 +203,31 @@ public class EmailAction extends FrontendAction {
 	}
 	
 	/**
-	 * @return the acceptedCompetitiors
+	 * @return the acceptedCompetitors
 	 */
-	public List<String> getAcceptedCompetitiors() {
-		return acceptedCompetitiors;
+	public List<String> getAcceptedCompetitors() {
+		return acceptedCompetitors;
 	}
 
 	/**
-	 * @param acceptedCompetitiors the acceptedCompetitiors to set
+	 * @param acceptedCompetitors the acceptedCompetitors to set
 	 */
-	public void setAcceptedCompetitiors(List<String> acceptedCompetitiors) {
-		this.acceptedCompetitiors = acceptedCompetitiors;
+	public void setAcceptedCompetitors(List<String> acceptedCompetitors) {
+		this.acceptedCompetitors = acceptedCompetitors;
 	}
 
 	/**
-	 * @return the pendingCompetitiors
+	 * @return the pendingCompetitors
 	 */
-	public List<String> getPendingCompetitiors() {
-		return pendingCompetitiors;
+	public List<String> getPendingCompetitors() {
+		return pendingCompetitors;
 	}
 
 	/**
-	 * @param pendingCompetitiors the pendingCompetitiors to set
+	 * @param pendingCompetitors the pendingCompetitors to set
 	 */
-	public void setPendingCompetitiors(List<String> pendingCompetitiors) {
-		this.pendingCompetitiors = pendingCompetitiors;
+	public void setPendingCompetitors(List<String> pendingCompetitors) {
+		this.pendingCompetitors = pendingCompetitors;
 	}
 	
 	/**
@@ -261,25 +300,34 @@ public class EmailAction extends FrontendAction {
 				log.debug("Loaded competition: {}", competition.getName());
 			}
 			
-			List<String> acceptedCompetitiors = new ArrayList<String>();
-			List<String> pendingCompetitiors = new ArrayList<String>();
+			List<String> acceptedCompetitors = new ArrayList<String>();
+			List<String> pendingCompetitors = new ArrayList<String>();
 			
 			// parse csv file
 			try {
-				CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(csv), "ISO-8859-1"), ',');
+				// convert the CSV file
+                CSVReader reader;
+                if (isCsvConvert()) {
+                    StringWriter sw = new StringWriter();
+                    csvConverter.compTool2Wca(new InputStreamReader(new FileInputStream(csv), getCsvFileEncoding()), sw);
+                    reader = new CSVReader(new StringReader(sw.toString()), ',');
+                    setCsvConvert(false);
+                } else {
+                    reader = new CSVReader(new InputStreamReader(new FileInputStream(csv), getCsvFileEncoding()), ',');
+                }
 				List<String[]> csvLines = reader.readAll();
 				csvLines.remove(0); // first line contains column definition
 				for (String[] line : csvLines) {
 					String email = line[line.length-3];
 					log.info("Email: {}", email);
 					if ("a".equals(line[0])) { // accepted competitors
-						acceptedCompetitiors.add(email);
+						acceptedCompetitors.add(email);
 					} else { // pending competitors
-						pendingCompetitiors.add(email);
+						pendingCompetitors.add(email);
 					}
 				}
-				setAcceptedCompetitiors(acceptedCompetitiors);
-				setPendingCompetitiors(pendingCompetitiors);
+				setAcceptedCompetitors(acceptedCompetitors);
+				setPendingCompetitors(pendingCompetitors);
 				setSendToAccepted(true);
 				setSendToPending(false);
                 setBody("");
@@ -310,12 +358,12 @@ public class EmailAction extends FrontendAction {
 				email.setFrom(getCompetition().getOrganiserEmail(), getCompetition().getOrganiser());
 				email.addBcc(getCompetition().getWcaDelegateEmail(), getCompetition().getWcaDelegate());
 				if (isSendToAccepted()) {
-					for (String toAddress : getAcceptedCompetitiors()) {
+					for (String toAddress : getAcceptedCompetitors()) {
 						email.addBcc(toAddress);
 					}
 				}
 				if (isSendToPending()) {
-					for (String toAddress : getPendingCompetitiors()) {
+					for (String toAddress : getPendingCompetitors()) {
 						email.addBcc(toAddress);
 					}
 				}

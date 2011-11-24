@@ -16,13 +16,7 @@
  */
 package dk.cubing.liveresults.action.admin;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +35,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
 
+import dk.cubing.liveresults.utilities.CsvConverter;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
@@ -73,6 +68,7 @@ public class ScramblesAction extends FrontendAction {
 	private static final Logger log = LoggerFactory.getLogger(ScramblesAction.class);
 	
 	private CompetitionService competitionService;
+    private final CsvConverter csvConverter;
 	
 	private String xsltTemplate;
 	private FopFactory fopFactory;
@@ -84,6 +80,9 @@ public class ScramblesAction extends FrontendAction {
 	private File csv;
 	private String csvContentType;
 	private String csvFileName;
+    private boolean csvConvert = false;
+    private List<String> csvFileEncodings = new ArrayList<String>();
+    private String csvFileEncoding = "ISO-8859-1";
 
 	private List<Competition> competitions;
 	private String competitionId;
@@ -115,6 +114,7 @@ public class ScramblesAction extends FrontendAction {
 			fopFactory = FopFactory.newInstance();
 			tFactory = TransformerFactory.newInstance();
 			docImplementation = DocumentBuilderFactory.newInstance().newDocumentBuilder().getDOMImplementation();
+            csvConverter = new CsvConverter();
 			
 			// init maps
 			initMap();
@@ -283,6 +283,41 @@ public class ScramblesAction extends FrontendAction {
 	public void setCsvFileName(String csvFileName) {
 		this.csvFileName = csvFileName;
 	}
+
+    /**
+     * @return
+     */
+    public String getCsvFileEncoding() {
+        return csvFileEncoding;
+    }
+
+    /**
+     * @param csvFileEncoding
+     */
+    public void setCsvFileEncoding(String csvFileEncoding) {
+        this.csvFileEncoding = csvFileEncoding;
+    }
+
+    /**
+     * @return
+     */
+    public List<String> getCsvFileEncodings() {
+        return csvFileEncodings;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isCsvConvert() {
+        return csvConvert;
+    }
+
+    /**
+     * @param csvConvert
+     */
+    public void setCsvConvert(boolean csvConvert) {
+        this.csvConvert = csvConvert;
+    }
 
 	/**
 	 * @param competition the competition to set
@@ -536,7 +571,16 @@ public class ScramblesAction extends FrontendAction {
 			
 			// parse csv file
 			try {
-				CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(csv), "ISO-8859-1"), ',');
+				// convert the CSV file
+                CSVReader reader;
+                if (isCsvConvert()) {
+                    StringWriter sw = new StringWriter();
+                    csvConverter.compTool2Wca(new InputStreamReader(new FileInputStream(csv), getCsvFileEncoding()), sw);
+                    reader = new CSVReader(new StringReader(sw.toString()), ',');
+                    setCsvConvert(false);
+                } else {
+                    reader = new CSVReader(new InputStreamReader(new FileInputStream(csv), getCsvFileEncoding()), ',');
+                }
 				List<String[]> csvLines = reader.readAll();
 				// first row which includes event names
 				List<Event> events = parseEvents(csvLines.remove(0));

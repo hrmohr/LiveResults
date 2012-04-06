@@ -254,7 +254,6 @@
 									<includes>
 										<include>macosx-x86-universal-64</include>
 										<include>windows-x86-32</include>
-										<include>windows-x86-64</include>
 									</includes>
 									<configuration>
 										<property>

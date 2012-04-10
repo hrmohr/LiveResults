@@ -1378,7 +1378,7 @@ public class ScoresheetAction extends FrontendAction {
 						average.setCellFormula("IF(COUNTBLANK("+range+")>0,\"\",IF(COUNTIF("+range+",\"DNF\")+COUNTIF("+range+",\"DNS\")>1,\"DNF\",IF(COUNTIF("+range+",\"DNF\")+COUNTIF("+range+",\"DNS\")>0,(SUM("+range+")-J"+(i+5)+")/3,(SUM("+range+")-J"+(i+5)+"-L"+(i+5)+")/3)))");
 						break;
 					}
-				} else if (SHEET_TYPE_MEAN3S.equals(template.getSheetName()) || SHEET_TYPE_MEAN3M.equals(template.getSheetName())) {
+				} else if (SHEET_TYPE_MEAN3S.equals(template.getSheetName())) {
 					String range = "E"+(i+5)+":"+"G"+(i+5);
 					switch (j) {
 					// rank
@@ -1397,6 +1397,25 @@ public class ScoresheetAction extends FrontendAction {
 						mean.setCellFormula("IF(COUNTBLANK("+range+")>0,\"\",IF(COUNTIF("+range+",\"DNF\")+COUNTIF("+range+",\"DNS\")>0,\"DNF\",ROUND(AVERAGE("+range+"),2)))");
 						break;
 					}
+                } else if (SHEET_TYPE_MEAN3M.equals(template.getSheetName())) {
+                    String range = "E"+(i+5)+":"+"G"+(i+5);
+                    switch (j) {
+                        // rank
+                        case 0:
+                            Cell rank = getCell(resultSheet, i+4, j, Cell.CELL_TYPE_FORMULA);
+                            rank.setCellFormula("IF(COUNTBLANK(B"+(i+5)+")>0,\"\",IF(AND(H"+(i+4)+"=H"+(i+5)+",J"+(i+4)+"=J"+(i+5)+"),A"+(i+4)+",ROW()-4))");
+                            break;
+                        // best
+                        case 7:
+                            Cell best = getCell(resultSheet, i+4, j, Cell.CELL_TYPE_FORMULA);
+                            best.setCellFormula("IF(MIN("+range+")>0,MIN("+range+"),IF(COUNTBLANK("+range+")=3,\"\",\"DNF\"))");
+                            break;
+                        // mean
+                        case 9:
+                            Cell mean = getCell(resultSheet, i+4, j, Cell.CELL_TYPE_FORMULA);
+                            mean.setCellFormula("IF(COUNTBLANK("+range+")>0,\"\",IF(COUNTIF("+range+",\"DNF\")+COUNTIF("+range+",\"DNS\")>0,\"DNF\",AVERAGE("+range+")))");
+                            break;
+                    }
 				} else if (SHEET_TYPE_BEST1S.equals(template.getSheetName()) || SHEET_TYPE_BEST1M.equals(template.getSheetName()) || SHEET_TYPE_BEST1N.equals(template.getSheetName())) {
 					switch (j) {
 					// rank

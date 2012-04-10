@@ -282,7 +282,7 @@ public class ResultsEngine implements Runnable {
 		} catch (UnsupportedClientVersionException e) {
 			log.error("There is a new version available. Please upgrade.", e);
 		} catch (Exception e) {
-			log.error("Could not init web client. This could be a connection problem. Endpoint: {}", getConfig().getWebserviceEndpoint());
+			log.error("Could not init web client. This could be a connection problem. Endpoint: {}", getConfig().getWebserviceEndpoint(), e);
 		}
 		if (isSupported) {
 			log.info("No updates available.");

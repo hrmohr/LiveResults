@@ -45,7 +45,7 @@
 		<fop.version>0.95-1</fop.version>
 		<opencsv.version>2.0</opencsv.version>
 		<poi.version>3.6</poi.version>
-		<ical4j.version>1.0</ical4j.version>
+		<ical4j.version>1.0.3</ical4j.version>
 		<commons-email.version>1.2</commons-email.version>
 	</properties>
 
@@ -298,7 +298,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>net.fortuna.ical4j</groupId>
+			<groupId>org.mnode.ical4j</groupId>
 			<artifactId>ical4j</artifactId>
 			<version>${ical4j.version}</version>
 		</dependency>

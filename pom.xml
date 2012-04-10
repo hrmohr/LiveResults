@@ -44,9 +44,9 @@
 	</issueManagement>
 
 	<scm>
-		<connection>scm:svn:svn://svn.cubing.dk/liveresults/trunk</connection>
-		<developerConnection>scm:svn:svn+ssh://svn.cubing.dk/home/svn/repositories/liveresults/trunk</developerConnection>
-		<url>http://svn.cubing.dk/viewvc/viewvc.cgi/liveresults/trunk/</url>
+		<connection>scm:git:git://github.com/hrmohr/LiveResults.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:hrmohr/LiveResults.git</developerConnection>
+		<url>https://github.com/hrmohr/LiveResults</url>
 	</scm>
 
 	<modules>

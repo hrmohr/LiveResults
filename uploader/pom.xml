@@ -288,7 +288,6 @@
                     </execution>
                 </executions>
                 <configuration>
-					<minimizeJar>true</minimizeJar>
 					<shadedArtifactAttached>true</shadedArtifactAttached>
 					<shadedClassifierName>shade</shadedClassifierName>
                     <transformers>

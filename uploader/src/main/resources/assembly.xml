@@ -47,8 +47,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <lineEnding>unix</lineEnding>
     </file>
     <file>
-        <source>target/${project.artifactId}-${project.version}.jar</source>
+        <source>target/${project.artifactId}-${project.version}-shade.jar</source>
         <outputDirectory>/</outputDirectory>
+		<destName>${project.artifactId}-${project.version}.jar</destName>
         <fileMode>0755</fileMode>
     </file>
   </files>

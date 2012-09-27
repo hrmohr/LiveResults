@@ -76,4 +76,42 @@
         </plugins>
     </build>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>development</id>
+            <properties>
+                <tomcat.manager.url>http://localhost:8080/manager</tomcat.manager.url>
+
+                <jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
+                <jdbc.dialect>org.hibernate.dialect.MySQLInnoDBDialect</jdbc.dialect>
+                <jdbc.url>jdbc:mysql://localhost:8889/wca_live_dev</jdbc.url>
+                <jdbc.urlWca>jdbc:mysql://localhost:8889/wca</jdbc.urlWca>
+                <jdbc.username>root</jdbc.username>
+                <jdbc.password>root</jdbc.password>
+                <jdbc.show_sql>true</jdbc.show_sql>
+
+                <config.filename>config.properties</config.filename>
+
+                <struts.devMode>true</struts.devMode>
+                <context.path>web</context.path>
+
+                <email.smtp.server>smtp.gmail.com</email.smtp.server>
+                <email.ssl>true</email.ssl>
+                <email.username>hr.mohr@gmail.com</email.username>
+                <email.password>${email.password}</email.password>
+
+                <irc.password>${irc.password}}</irc.password>
+            </properties>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+        </profile>
+    </profiles>
 </project>

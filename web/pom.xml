@@ -440,6 +440,7 @@
                                 </goals>
                                 <configuration>
                                     <background>true</background>
+                                    <logOutput>true</logOutput>
                                 </configuration>
                             </execution>
                         </executions>
@@ -463,6 +464,9 @@
                                 <goals>
                                     <goal>xvfb</goal>
                                 </goals>
+                                <configuration>
+                                    <display>:2</display>
+                                </configuration>
                             </execution>
 
                             <execution>
@@ -473,6 +477,7 @@
                                 </goals>
                                 <configuration>
                                     <background>true</background>
+                                    <logOutput>true</logOutput>
                                 </configuration>
                             </execution>
                         </executions>

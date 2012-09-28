@@ -464,6 +464,9 @@
                                 <goals>
                                     <goal>xvfb</goal>
                                 </goals>
+                                <configuration>
+                                    <display>:20</display>
+                                </configuration>
                             </execution>
 
                             <execution>

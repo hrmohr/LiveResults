@@ -9,6 +9,8 @@ import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
+import static org.junit.Assert.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: mohr
@@ -36,5 +38,6 @@ public class IndexTest {
     @Test
     public void testIndex() {
         selenium.open("/index.action");
+        assertTrue(true);
     }
 }

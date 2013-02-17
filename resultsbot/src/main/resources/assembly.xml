@@ -43,10 +43,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </fileSet>
   </fileSets>
   <files>
-  	<file>
-  		<source>lib/pircbot-${pircbot.version}.jar</source>
-  		<outputDirectory>/lib</outputDirectory>
-  	</file>
     <file>
         <source>../LICENSE</source>
         <outputDirectory>/</outputDirectory>

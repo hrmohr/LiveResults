@@ -102,10 +102,10 @@
 
                 <email.smtp.server>smtp.gmail.com</email.smtp.server>
                 <email.ssl>true</email.ssl>
-                <email.username>hr.mohr@gmail.com</email.username>
-                <email.password>${email.password}</email.password>
+                <email.username>${email.username.secret}</email.username>
+                <email.password>${email.password.secret}</email.password>
 
-                <irc.password>${irc.password}}</irc.password>
+                <irc.password>${irc.password.secret}</irc.password>
             </properties>
             <activation>
                 <os>
